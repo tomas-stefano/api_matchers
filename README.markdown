@@ -28,17 +28,7 @@ Collection of RSpec matchers for create your API.
 
       "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:id).with(54)
 
-      "{ 'error': '', 'transaction': { 'id': '55', 'status': 'waiting_payment' } }".should have_node(:error).with('not_authorized')
-
-If you want to configure to make all **searches inside a root element**, you can do this:
-
-      APIMatchers.setup do |config|
-        config.root_element = :transaction
-      end
-
-      "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:id).with(54) # WILL PASS
-
-      "{ 'error': '', 'transaction': { 'id': '55', 'status': 'waiting_payment' } }".should have_node(:error).with('not_authorized') # WILL NOT PASS BECAUSE THE ERROR NODE ISN'T INSIDE THE TRANSACTION NODE
+      "{ 'error': '', 'transaction': { 'id': '55' } }".should have_node(:error).with('not_authorized')
 
 ### HAVE NODE Matcher Configuration
 
