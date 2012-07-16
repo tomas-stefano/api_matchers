@@ -28,7 +28,7 @@ Collection of RSpec matchers for create your API.
 
       "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:id).with(54)
 
-      "{ 'error': '', 'transaction': { 'id': '55' } }".should have_node(:error).with('not_authorized')
+      "{ 'error': 'not_authorized', 'transaction': { 'id': '55' } }".should have_node(:error).with('not_authorized')
 
 ### HAVE NODE Matcher Configuration
 
@@ -41,6 +41,8 @@ You can configure if you want xml or json(**JSON is the default**):
       '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
 
 **Observation: You can use the *have_xml_node* or *have_json_node* if you don't want to configure everytime.**
+
+**If you work with xml and json in the same API, I recommend that you check the have_json_node and have_xml_node matchers.**
 
 You can configure the name of the method for example:
 
@@ -55,6 +57,15 @@ You can configure the name of the method for example:
 Then you can use without call the **#body** method:
 
       response.should have_node(:foo).with('bar')
+
+### Have JSON Node Matcher
+
+    "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_json_node(:id).with(54)
+
+### Have XML Node Matcher
+
+    "<product><name>gateway</name></product>".should have_xml_node(:name).with('gateway')
+
 
 ### Create Resource Matcher
 
