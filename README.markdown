@@ -22,7 +22,18 @@ Collection of RSpec matchers for create your API.
 
 ## Usage
 
+### Including in RSpec
+
+To include all this matchers you need to include the APIMatchers::RSpecMatchers module:
+
+    RSpec.configure do |config|
+      config.include APIMatchers::RSpecMatchers
+    end
+
 ### Have Node Matcher
+
+The have_node matcher parse the actual and see if have the expcted node with the expected value.
+**The default that have_node will parse is JSON.**
 
       "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:transaction)
 
@@ -32,15 +43,13 @@ Collection of RSpec matchers for create your API.
 
 ### HAVE NODE Matcher Configuration
 
-You can configure if you want xml or json(**JSON is the default**):
+You can configure if you want xml(**JSON is the default**):
 
       APIMatchers.setup do |config|
         config.content_type = :xml
       end
 
       '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
-
-**Observation: You can use the *have_xml_node* or *have_json_node* if you don't want to configure everytime.**
 
 **If you work with xml and json in the same API, I recommend that you check the have_json_node and have_xml_node matchers.**
 
