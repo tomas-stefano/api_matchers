@@ -53,6 +53,28 @@ module APIMatchers
       #
       cattr_accessor :have_node_matcher
       self.have_node_matcher = :json
+
+      # The headers method and the content type key that will be used by the headers matchers.
+      #
+      # ==== Examples
+      #
+      #  response.response_header['Content-Type'].should be_json
+      #  response.response_header['Content-Type'].should be_xml
+      #
+      #  # Instead calling #response_header everytime, you can configure:
+      #
+      #  APIMatchers.setup do |config|
+      #    config.header_method = :response_header
+      #    config.header_content_type_key = 'Content-Type'
+      #  end
+      #
+      # Then:
+      #
+      #  response.should be_json
+      #  response.should be_xml
+      #
+      cattr_accessor :header_method
+      cattr_accessor :header_content_type_key
     end
   end
 end

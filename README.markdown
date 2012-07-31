@@ -126,13 +126,27 @@ This configurations affects this matchers:
 
 This is a matcher that see if the content type is xml:
 
-    response.content_type.should be_in_xml
+    response.headers['Content-Type'].should be_in_xml
 
 ### Be in JSON Matcher
 
 This is a matcher that see if the content type is in JSON:
 
-    response.content_type.should be_in_json
+    response.headers['Content-Type'].should be_in_json
+
+### Headers Configuration
+
+You can configure the name method to call the headers and content type:
+
+    APIMatchers.setup do |config|
+      config.header_method           = :headers
+      config.header_content_type_key = 'Content-Type'
+    end
+
+Then you can use without call the **#headers** calling the **#['Content-Type']** method:
+
+    response.should be_in_json
+    response.should be_in_xml
 
 ### Acknowlegments
 

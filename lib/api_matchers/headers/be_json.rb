@@ -6,7 +6,7 @@ module APIMatchers
       end
 
       def failure_message_for_should
-        %Q{expected a JSON response with '#{expected_content_type}'. Got: '#{@actual}'.}
+        %Q{expected a JSON response with '#{expected_content_type}'. Got: '#{content_type_response}'.}
       end
 
       def failure_message_for_should_not
