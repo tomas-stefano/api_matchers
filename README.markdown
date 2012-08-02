@@ -41,6 +41,9 @@ The have_node matcher parse the actual and see if have the expcted node with the
 
       "{ 'error': 'not_authorized', 'transaction': { 'id': '55' } }".should have_node(:error).with('not_authorized')
 
+      { :error => "Transaction error: Name can't be blank" }.to_json.should have_node(:error).including_text("Transaction error")
+
+
 ### HAVE NODE Matcher Configuration
 
 You can configure if you want xml(**JSON is the default**):
@@ -50,6 +53,10 @@ You can configure if you want xml(**JSON is the default**):
       end
 
       '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
+
+      "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).with("Transaction error: Name can't be blank")
+
+      "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).including_text("Transaction error")
 
 **If you work with xml and json in the same API, I recommend that you check the have_json_node and have_xml_node matchers.**
 
