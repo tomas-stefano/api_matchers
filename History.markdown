@@ -1,4 +1,4 @@
-## development
+## v0.1.0
 
 1) Add the #including_text for have_json_node and have_xml_node matcher:
 
