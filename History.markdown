@@ -1,3 +1,11 @@
+## development
+
+1) Add the #including_text for have_json_node and have_xml_node matcher:
+
+    { :error => "Transaction error: Name can't be blank" }.to_json.should have_json_node(:error).including_text("Transaction error")
+
+    "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).including_text("Transaction error")
+
 ## v0.0.2
 
 1) Put the headers method and the content type key in the setup class and that will be used by the headers matchers(be_json and be_xml).

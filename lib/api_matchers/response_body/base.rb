@@ -18,6 +18,11 @@ module APIMatchers
         self
       end
 
+      def including_text(expected_including_text)
+        @expected_including_text = expected_including_text
+        self
+      end
+
       def response_body
         if @setup.response_body_method.present?
           @actual.send(@setup.response_body_method)
@@ -37,6 +42,8 @@ module APIMatchers
       def added_message
         if @with_value
           " with value: '#{@with_value}'"
+        elsif @expected_including_text
+          " including text: '#{@expected_including_text}'"
         else
           ""
         end

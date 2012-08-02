@@ -51,6 +51,18 @@ describe APIMatchers::ResponseBody::HaveXmlNode do
         }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '<transaction><error><code>999</code></error></transaction>'})
       end
     end
+
+    context "including_text" do
+      it "should pass when the expected is included in the actual" do
+        "<error><message>Transaction error: Name can't be blank</message></error>".should have_xml_node(:message).including_text("Transaction error")
+      end
+
+      it "should fail when the expected is not included in the actual" do
+        expect {
+          "<error><message>Transaction error: Name can't be blank</message></error>".should have_xml_node(:message).including_text("Fox on the run")
+        }.to fail_with(%Q{expected to have node called: 'message' including text: 'Fox on the run'. Got: '<error><message>Transaction error: Name can't be blank</message></error>'})
+      end
+    end
   end
 
   describe "actual.should_not have_xml_node" do
@@ -76,6 +88,18 @@ describe APIMatchers::ResponseBody::HaveXmlNode do
       expect {
        "<transaction><status>paid</status></transaction>".should_not have_xml_node(:status).with('paid')
       }.to fail_with(%Q{expected to NOT have node called: 'status' with value: 'paid'. Got: '<transaction><status>paid</status></transaction>'})
+    end
+
+    context "including_text" do
+      it "should pass when the expected is included in the actual" do
+        "<error><message>Transaction error: Name can't be blank</message></error>".should_not have_xml_node(:message).including_text("Girls of Summer")
+      end
+
+      it "should fail when the expected is not included in the actual" do
+        expect {
+          "<error><message>Transaction error: Name can't be blank</message></error>".should_not have_xml_node(:message).including_text("Transaction error")
+        }.to fail_with(%Q{expected to NOT have node called: 'message' including text: 'Transaction error'. Got: '<error><message>Transaction error: Name can't be blank</message></error>'})
+      end
     end
   end
 

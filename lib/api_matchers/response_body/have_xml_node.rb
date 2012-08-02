@@ -10,6 +10,8 @@ module APIMatchers
 
         if @with_value
           node == @with_value.to_s
+        elsif @expected_including_text
+          node.to_s.include?(@expected_including_text)
         else
           node.present?
         end

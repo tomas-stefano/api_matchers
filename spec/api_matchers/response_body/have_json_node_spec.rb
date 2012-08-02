@@ -51,6 +51,18 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
         }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
       end
     end
+
+    context "including_text" do
+      it "should pass when the expected is included in the actual" do
+        { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should have_json_node(:message).including_text("Transaction error")
+      end
+
+      it "should fail when the expected is not included in the actual" do
+        expect {
+          { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should have_json_node(:message).including_text("Fox on the run")
+        }.to fail_with(%Q{expected to have node called: 'message' including text: 'Fox on the run'. Got: '{"transaction":{"error":{"message":"Transaction error: Name can't be blank"}}}'})
+      end
+    end
   end
 
   describe "actual.should_not have_json_node" do
@@ -76,6 +88,18 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
       expect {
        { :status => 'paid' }.to_json.should_not have_json_node(:status).with('paid')
       }.to fail_with(%Q{expected to NOT have node called: 'status' with value: 'paid'. Got: '{"status":"paid"}'})
+    end
+
+    context "including_text" do
+      it "should pass when the expected is NOT included in the actual" do
+        { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should_not have_json_node(:message).including_text("Love gun")
+      end
+
+      it "should fail when the expected is included in the actual" do
+        expect {
+          { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should_not have_json_node(:message).including_text("Transaction error")
+        }.to fail_with(%Q{expected to NOT have node called: 'message' including text: 'Transaction error'. Got: '{"transaction":{"error":{"message":"Transaction error: Name can't be blank"}}}'})
+      end
     end
   end
 
