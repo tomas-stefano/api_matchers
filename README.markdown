@@ -35,11 +35,17 @@ To include all this matchers you need to include the APIMatchers::RSpecMatchers 
 The have_node matcher parse the actual and see if have the expcted node with the expected value.
 **The default that have_node will parse is JSON.**
 
+You can verify if node exists:
+
       "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:transaction)
+
+Or if node exist with a value:
 
       "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:id).with(54)
 
       "{ 'error': 'not_authorized', 'transaction': { 'id': '55' } }".should have_node(:error).with('not_authorized')
+
+To see the json node and see if include a text, you can do this:
 
       { :error => "Transaction error: Name can't be blank" }.to_json.should have_node(:error).including_text("Transaction error")
 
@@ -52,9 +58,17 @@ You can configure if you want xml(**JSON is the default**):
         config.content_type = :xml
       end
 
+      '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status)
+
+Using the with method:
+
       '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
 
+Or you can use the **have_xml_node** matcher:
+
       "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).with("Transaction error: Name can't be blank")
+
+To see the xml node and see if include a text, you can do this:
 
       "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).including_text("Transaction error")
 
