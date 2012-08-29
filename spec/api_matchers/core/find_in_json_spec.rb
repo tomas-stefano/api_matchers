@@ -15,11 +15,11 @@ module APIMatchers::Core
 
       context 'when node do not exists' do
         it "should return nil if don't find the expected node" do
-          expect{ FindInJSON.new('product' => 'pabx').find(node: 'developers').should raise_error( Exceptions::ApiMatcherKeyNotFound ) }
+          expect{ FindInJSON.new('product' => 'pabx').find(node: 'developers').should raise_error( ::APIMatchers::Core::Exceptions::KeyNotFound ) }
         end
 
         it "should return nil if don't find the expected node in the deep JSON" do
-          expect{ FindInJSON.new('transaction' => { 'id' => 150, 'error' => {} }).find(node: 'code').should raise_error( Exceptions::ApiMatcherKeyNotFound ) }
+          expect{ FindInJSON.new('transaction' => { 'id' => 150, 'error' => {} }).find(node: 'code').should raise_error( ::APIMatchers::Core::Exceptions::KeyNotFound ) }
         end
       end
     end

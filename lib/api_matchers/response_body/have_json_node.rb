@@ -23,7 +23,7 @@ module APIMatchers
             # the node is present
             true
           end
-        rescue Exceptions::ApiMatcherKeyNotFound
+        rescue ::APIMatchers::Core::Exceptions::KeyNotFound
           # the key was not found
           false
         end
