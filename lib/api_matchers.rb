@@ -1,6 +1,7 @@
 require "api_matchers/version"
 require "active_support/core_ext/object"
 require "active_support/core_ext/class"
+require 'exceptions'
 
 module APIMatchers
   autoload :RSpecMatchers, 'api_matchers/core/rspec_matchers'
@@ -38,6 +39,8 @@ module APIMatchers
     autoload :FindInJSON, 'api_matchers/core/find_in_json'
     autoload :Setup, 'api_matchers/core/setup'
   end
+
+  autoload :Exceptions, 'exceptions'
 
   def self.setup
     yield(::APIMatchers::Core::Setup)

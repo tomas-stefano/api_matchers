@@ -12,14 +12,20 @@ module APIMatchers
           {}
         end
 
-        node = Core::FindInJSON.new(json).find(node: @expected_node.to_s)
+        begin
+          node = Core::FindInJSON.new(json).find(node: @expected_node.to_s)
 
-        if @with_value
-          node.to_s == @with_value.to_s
-        elsif @expected_including_text
-          node.to_s.include?(@expected_including_text)
-        else
-          node.present?
+          if @with_value
+            node.to_s == @with_value.to_s
+          elsif @expected_including_text
+            node.to_s.include?(@expected_including_text)
+          else
+            # the node is present
+            true
+          end
+        rescue Exceptions::ApiMatcherKeyNotFound
+          # the key was not found
+          nil
         end
       end
     end

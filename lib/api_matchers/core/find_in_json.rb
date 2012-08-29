@@ -18,7 +18,7 @@ module APIMatchers
             return FindInJSON.new(value).find(node: expected_key)
           end
         end
-        nil # Don't find anything!
+        raise Exceptions::ApiMatcherKeyNotFound.new( "key was not found" ) # we did not find the requested key
       end
     end
   end
