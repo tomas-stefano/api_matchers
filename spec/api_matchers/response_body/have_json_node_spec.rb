@@ -30,6 +30,22 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
       end
     end
 
+    context 'expected key and nil value' do
+      it "should pass when the expected key exists" do
+        { :product => nil }.to_json.should have_json_node(:product)
+      end
+
+      it "should pass when the expected key exists and the expected value is nil" do
+        { :product => nil }.to_json.should have_json_node(:product).with( nil )
+      end
+
+      it "should fail when the expected key exist but the expected value don't exist" do
+        expect {
+         { :product => nil }.to_json.should have_json_node(:product).with('email-marketing')
+        }.to fail_with(%Q{expected to have node called: 'product' with value: 'email-marketing'. Got: '{"product":null}'})
+      end
+    end
+
     context 'expected key and value in more deep in the JSON' do
       it "should pass when the expected key exist" do
         { :transaction => { :id => 150 } }.to_json.should have_json_node(:id)
