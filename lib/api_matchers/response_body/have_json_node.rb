@@ -25,7 +25,7 @@ module APIMatchers
           end
         rescue Exceptions::ApiMatcherKeyNotFound
           # the key was not found
-          nil
+          false
         end
       end
     end
