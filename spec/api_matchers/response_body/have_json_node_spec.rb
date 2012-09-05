@@ -17,6 +17,10 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
         { :product => 'payment-gateway' }.to_json.should have_json_node(:product).with('payment-gateway')
       end
 
+      it "should pass when the expected key exist with the expected value (as integer)" do
+        { :number => 1 }.to_json.should have_json_node(:number).with(1)
+      end
+
       it "should fail when the expected key exist but the expected value don't exist" do
         expect {
          { :product => 'payment-gateway' }.to_json.should have_json_node(:product).with('email-marketing')
