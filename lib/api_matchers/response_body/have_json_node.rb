@@ -13,7 +13,13 @@ module APIMatchers
         end
 
         begin
-          node = Core::FindInJSON.new(json).find(node: @expected_node.to_s)
+          options = {}
+          options[:node] = @expected_node.to_s
+          if @with_value.present?
+            options[:value] = @with_value
+          end
+
+          node = Core::FindInJSON.new(json).find( options )
 
           if @with_value
             node.to_s == @with_value.to_s

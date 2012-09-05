@@ -47,24 +47,63 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
     end
 
     context 'expected key and value in more deep in the JSON' do
-      it "should pass when the expected key exist" do
-        { :transaction => { :id => 150 } }.to_json.should have_json_node(:id)
-      end
+      context '.to_json used' do
+        it "should pass when the expected key exist" do
+          { :transaction => { :id => 150 } }.to_json.should have_json_node(:id)
+        end
 
-      it "should pass when the expected key and expected value exist" do
-        { :transaction => { :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('999')
-      end
+        it "should pass when the expected key and expected value exist" do
+          { :transaction => { :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('999')
+        end
 
-      it "should fail when the expected key does not exist" do
-        expect {
-         { :transaction => { :id => 150, :error => {} } }.to_json.should have_json_node(:code)
-        }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
-      end
+        it "should pass when the expected key and expected value exist in very deep" do
+          { :first=>"A", :second=>nil, :third=>{ :stuff => { :first_stuff=>{ :color=>"green", :size=>"small", :shape=>"circle", :uid=>"first_stuff"}, :second_stuff=>{ :color=>"blue", :size=>"large", :shape=>"square", :uid=>"second_stuff"}}, :junk=>[{"name"=>"junk_one", :uid=>"junk_one", :stuff_uid=>"first_stuff"}, { :name=>"junk_two", :uid=>"junk_two", :stuff_uid=>"second_stuff"}]}}.to_json.should have_json_node( :junk )
+        end
 
-      it "should fail when the expected key exist but don't exist the expected value" do
-        expect {
-         { :transaction => { :id => 150, :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('001')
-        }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
+        it "should pass when the expected key and expected value exist in very deep" do
+          { :first=>"A", :second=>nil, :third=>{ :stuff => { :first_stuff=>{ :color=>"green", :size=>"small", :shape=>"circle", :uid=>"first_stuff"}, :second_stuff=>{ :color=>"blue", :size=>"large", :shape=>"square", :uid=>"second_stuff"}}, :junk=>[{"name"=>"junk_one", :uid=>"junk_one", :stuff_uid=>"first_stuff"}, { :name=>"junk_two", :uid=>"junk_two", :stuff_uid=>"second_stuff"}]}}.to_json.should have_json_node( :name ).with( "junk_two" )
+        end
+
+        it "should fail when the expected key does not exist" do
+          expect {
+           { :transaction => { :id => 150, :error => {} } }.to_json.should have_json_node(:code)
+          }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
+        end
+
+        it "should fail when the expected key exist but don't exist the expected value" do
+          expect {
+           { :transaction => { :id => 150, :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('001')
+          }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
+        end
+      end
+      context 'json string used' do
+        it "should pass when the expected key exist" do
+          '{ "transaction": {"id": 150 } }'.should have_json_node(:id)
+        end
+
+        it "should pass when the expected key and expected value exist" do
+          '{ "transaction": {"error": { "code": "999" } } }'.should have_json_node(:code).with('999')
+        end
+
+        it "should pass when the expected key and expected value exist in very deep" do
+          '{"first":"A","second":null,"third":{"stuff":{"first_stuff":{"color":"green","size":"small","shape":"circle","uid":"first_stuff"},"second_stuff":{"color":"blue","size":"large","shape":"square","uid":"second_stuff"}},"junk":[{"name":"junk_one","uid":"junk_one","stuff_uid":"first_stuff"},{"name":"junk_two","uid":"junk_two","stuff_uid":"second_stuff"}]}}'.should have_json_node( :junk )
+        end
+
+        it "should pass when the expected key and expected value exist in very deep" do
+          '{"first":"A","second":null,"third":{"stuff":{"first_stuff":{"color":"green","size":"small","shape":"circle","uid":"first_stuff"},"second_stuff":{"color":"blue","size":"large","shape":"square","uid":"second_stuff"}},"junk":[{"name":"junk_one","uid":"junk_one","stuff_uid":"first_stuff"},{"name":"junk_two","uid":"junk_two","stuff_uid":"second_stuff"}]}}'.should have_json_node( :name ).with( "junk_two" )
+        end
+
+        it "should fail when the expected key does not exist" do
+          expect {
+           '{"transaction":{"id":150,"error":{}}}'.should have_json_node(:code)
+          }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
+        end
+
+        it "should fail when the expected key exist but don't exist the expected value" do
+          expect {
+           '{"transaction":{"id":150,"error":{"code":"999"}}}'.should have_json_node(:code).with('001')
+          }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
+        end
       end
     end
 
