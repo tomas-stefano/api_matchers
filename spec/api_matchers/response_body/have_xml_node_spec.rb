@@ -30,7 +30,7 @@ describe APIMatchers::ResponseBody::HaveXmlNode do
       end
     end
 
-    context 'expected key and value in more deep in the JSON' do
+    context 'expected key and value in more deep in the XML' do
       it "should pass when the expected key exist" do
         "<transaction><id>150</id></transaction>".should have_xml_node(:id)
       end
