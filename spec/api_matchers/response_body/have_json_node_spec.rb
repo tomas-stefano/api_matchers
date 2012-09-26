@@ -21,8 +21,20 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
         { :number => 1 }.to_json.should have_json_node(:number).with(1)
       end
 
-      it "should pass when the expected key exist with the expected value (as boolean)" do
+      it "should pass when the expected key exist with the expected value (as boolean, true)" do
         { :number => true }.to_json.should have_json_node(:number).with(true)
+      end
+
+      it "should pass when the expected key exist with the expected value (as boolean, false)" do
+        { :number => false }.to_json.should have_json_node(:number).with(false)
+      end
+
+      it "should pass when the expected key exist but the expected value is wrong (as boolean, true)" do
+        { :number => true }.to_json.should_not have_json_node(:number).with(false)
+      end
+
+      it "should pass when the expected key exist but the expected value is wrong (as boolean, false)" do
+        { :number => false }.to_json.should_not have_json_node(:number).with(true)
       end
 
       it "should pass when the expected key exists with the expected value (as DateTime)" do

@@ -15,7 +15,7 @@ module APIMatchers
         begin
           options = {}
           options[:node] = @expected_node.to_s
-          if @with_value.present?
+          unless @with_value.nil?
             options[:value] = @with_value
           end
 
