@@ -15,15 +15,13 @@ module APIMatchers
         begin
           options = {}
           options[:node] = @expected_node.to_s
-          if @with_value.present?
+          unless @with_value.nil?
             options[:value] = @with_value
           end
 
           node = Core::FindInJSON.new(json).find( options )
 
-          if @with_value
-            node.to_s == @with_value.to_s
-          elsif @expected_including_text
+          if @expected_including_text
             node.to_s.include?(@expected_including_text)
           else
             # the node is present
