@@ -21,9 +21,7 @@ module APIMatchers
 
           node = Core::FindInJSON.new(json).find( options )
 
-          if @with_value
-            node.to_s == @with_value.to_s
-          elsif @expected_including_text
+          if @expected_including_text
             node.to_s.include?(@expected_including_text)
           else
             # the node is present

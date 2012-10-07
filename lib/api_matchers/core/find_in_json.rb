@@ -10,9 +10,16 @@ module APIMatchers
       def find(options={})
         expected_key = options.fetch(:node).to_s
         expected_value = options.fetch(:value) if options.has_key? :value
-
         @json.each do |key, value|
           if key == expected_key
+            if expected_value.present?
+              if expected_value.is_a? DateTime or expected_value.is_a? Date
+                  expected_value = expected_value.to_s
+              elsif expected_value.is_a? Time
+                  expected_value = expected_value.to_datetime.to_s
+              end
+            end
+            
             if value == expected_value or ! expected_value.present?
               return value
             end

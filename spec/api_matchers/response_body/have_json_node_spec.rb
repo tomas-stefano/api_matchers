@@ -9,7 +9,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
       it "should fail when the expected key does not exist" do
         expect {
-         { :product => 'pabx' }.to_json.should have_json_node(:developers)
+          { :product => 'pabx' }.to_json.should have_json_node(:developers)
         }.to fail_with(%Q{expected to have node called: 'developers'. Got: '{"product":"pabx"}'})
       end
 
@@ -25,9 +25,24 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
         { :number => true }.to_json.should have_json_node(:number).with(true)
       end
 
+      it "should pass when the expected key exists with the expected value (as DateTime)" do
+        now = DateTime.now
+        { :date => now }.to_json.should have_json_node(:date).with(now)
+      end
+
+      it "should pass when the expected key exists with the expected value (as Date)" do
+        now = Date.today
+        { :date => now }.to_json.should have_json_node(:date).with(now)
+      end
+
+      it "should pass when the expected key exists with the expected value (as Time)" do
+        now = Time.now
+        { :date => now }.to_json.should have_json_node(:date).with(now)
+      end
+
       it "should fail when the expected key exist but the expected value don't exist" do
         expect {
-         { :product => 'payment-gateway' }.to_json.should have_json_node(:product).with('email-marketing')
+          { :product => 'payment-gateway' }.to_json.should have_json_node(:product).with('email-marketing')
         }.to fail_with(%Q{expected to have node called: 'product' with value: 'email-marketing'. Got: '{"product":"payment-gateway"}'})
       end
 
@@ -49,7 +64,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
       it "should fail when the expected key exist but the expected value don't exist" do
         expect {
-         { :product => nil }.to_json.should have_json_node(:product).with('email-marketing')
+          { :product => nil }.to_json.should have_json_node(:product).with('email-marketing')
         }.to fail_with(%Q{expected to have node called: 'product' with value: 'email-marketing'. Got: '{"product":null}'})
       end
     end
@@ -74,13 +89,13 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
         it "should fail when the expected key does not exist" do
           expect {
-           { :transaction => { :id => 150, :error => {} } }.to_json.should have_json_node(:code)
+            { :transaction => { :id => 150, :error => {} } }.to_json.should have_json_node(:code)
           }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
         end
 
         it "should fail when the expected key exist but don't exist the expected value" do
           expect {
-           { :transaction => { :id => 150, :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('001')
+            { :transaction => { :id => 150, :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('001')
           }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
         end
       end
@@ -101,6 +116,21 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
           '{"boolean":true}'.should have_json_node(:boolean).with(true)
         end
 
+        it "should pass when the expected key exists with the expected value (as DateTime)" do
+          now = DateTime.parse( "2012-09-18T15:42:12-07:00" )
+          '{"date": "2012-09-18T15:42:12-07:00"}'.should have_json_node(:date).with(now)
+        end
+
+        it "should pass when the expected key exists with the expected value (as Date)" do
+          now = Date.parse( "2012-09-18" )
+          '{"date": "2012-09-18"}'.should have_json_node(:date).with(now)
+        end
+
+        it "should pass when the expected key exists with the expected value (as Time)" do
+          now = Time.parse( "2012-09-18T15:42:12-07:00" )
+          '{"date": "2012-09-18T15:42:12-07:00"}'.should have_json_node(:date).with(now)
+        end
+
         it "should pass when the expected key exist with the expected value (as boolean) in a multi node" do
           '{"uid":"123456","boolean":true}'.should have_json_node(:boolean).with(true)
         end
@@ -119,13 +149,13 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
         it "should fail when the expected key does not exist" do
           expect {
-           '{"transaction":{"id":150,"error":{}}}'.should have_json_node(:code)
+            '{"transaction":{"id":150,"error":{}}}'.should have_json_node(:code)
           }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
         end
 
         it "should fail when the expected key exist but don't exist the expected value" do
           expect {
-           '{"transaction":{"id":150,"error":{"code":"999"}}}'.should have_json_node(:code).with('001')
+            '{"transaction":{"id":150,"error":{"code":"999"}}}'.should have_json_node(:code).with('001')
           }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
         end
       end
@@ -155,7 +185,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
     it "should fail when the expected key exist" do
       expect {
-       { :status => 'paid' }.to_json.should_not have_json_node(:status)
+        { :status => 'paid' }.to_json.should_not have_json_node(:status)
       }.to fail_with(%Q{expected to NOT have node called: 'status'. Got: '{"status":"paid"}'})
     end
 
@@ -165,7 +195,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
     it "should fail when have the expected key and have the expected value" do
       expect {
-       { :status => 'paid' }.to_json.should_not have_json_node(:status).with('paid')
+        { :status => 'paid' }.to_json.should_not have_json_node(:status).with('paid')
       }.to fail_with(%Q{expected to NOT have node called: 'status' with value: 'paid'. Got: '{"status":"paid"}'})
     end
 
