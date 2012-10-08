@@ -1,3 +1,8 @@
+## v0.1.1
+
+1) Support Datetime, Date and Time comparison (Thanks to Stephen Orens).
+2) The have_node should accept boolean values (Thanks to Stephen Orens).
+
 ## v0.1.0
 
 1) Add the #including_text for have_json_node and have_xml_node matcher:
