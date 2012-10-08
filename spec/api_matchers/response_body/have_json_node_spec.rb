@@ -139,8 +139,8 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
         end
 
         it "should pass when the expected key exists with the expected value (as Time)" do
-          now = Time.parse( "2012-09-18T15:42:12-07:00" )
-          '{"date": "2012-09-18T15:42:12-07:00"}'.should have_json_node(:date).with(now)
+          now = Time.parse("2012-09-18T15:42:12Z")
+          '{"time": "2012-09-18T15:42:12+00:00"}'.should have_json_node(:time).with(now)
         end
 
         it "should pass when the expected key exist with the expected value (as boolean) in a multi node" do
