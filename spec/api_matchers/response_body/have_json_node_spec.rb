@@ -49,7 +49,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
       it "should pass when the expected key exists with the expected value (as Time)" do
         now = Time.now
-        { :date => now }.to_json.should have_json_node(:date).with(now)
+        { :time => now }.to_json.should have_json_node(:time).with(now)
       end
 
       it "should fail when the expected key exist but the expected value don't exist" do
