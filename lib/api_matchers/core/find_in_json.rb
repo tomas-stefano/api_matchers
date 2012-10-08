@@ -15,15 +15,13 @@ module APIMatchers
           if key == expected_key
             unless expected_value.nil?
               if expected_value.is_a? DateTime or expected_value.is_a? Date
-                  expected_value = expected_value.to_s
+                expected_value = expected_value.to_s
               elsif expected_value.is_a? Time
-                  expected_value = expected_value.to_datetime.to_s
+                expected_value = expected_value.to_datetime.to_s
               end
             end
-            
-            if value == expected_value or expected_value.nil?
-              return value
-            end
+
+            return value if value == expected_value or expected_value.nil?
           end
           # do we have more to recurse through?
           keep_going = nil
