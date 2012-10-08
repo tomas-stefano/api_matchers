@@ -9,7 +9,8 @@ module APIMatchers
 
       def find(options={})
         expected_key = options.fetch(:node).to_s
-        expected_value = options.fetch(:value) if options.has_key? :value
+        expected_value = options[:value]
+
         @json.each do |key, value|
           if key == expected_key
             unless expected_value.nil?
