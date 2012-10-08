@@ -26,10 +26,8 @@ module APIMatchers
           end
           # do we have more to recurse through?
           keep_going = nil
-          if value.is_a? Hash
-            keep_going = value                  # hash, keep going
-          elsif value.is_a? Array
-            keep_going = value                  # an array, keep going
+          if value.is_a? Hash or value.is_a? Array
+            keep_going = value                  # hash or array, keep going
           elsif value.nil? and key.is_a? Hash
             keep_going = key                    # the array was passed in and now in the key, keep going
           end
@@ -43,7 +41,8 @@ module APIMatchers
           end
 
         end
-        raise ::APIMatchers::Core::Exceptions::KeyNotFound.new( "key was not found" ) # we did not find the requested key
+         # we did not find the requested key
+        raise ::APIMatchers::Core::Exceptions::KeyNotFound.new("key was not found")
       end
     end
   end
