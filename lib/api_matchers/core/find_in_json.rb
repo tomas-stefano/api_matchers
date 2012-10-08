@@ -9,27 +9,23 @@ module APIMatchers
 
       def find(options={})
         expected_key = options.fetch(:node).to_s
-        expected_value = options.fetch(:value) if options.has_key? :value
+        expected_value = options[:value]
+
         @json.each do |key, value|
           if key == expected_key
             unless expected_value.nil?
               if expected_value.is_a? DateTime or expected_value.is_a? Date
-                  expected_value = expected_value.to_s
+                expected_value = expected_value.to_s
               elsif expected_value.is_a? Time
-                  expected_value = expected_value.to_datetime.to_s
+                expected_value = expected_value.to_datetime.to_s
               end
             end
-            
-            if value == expected_value or expected_value.nil?
-              return value
-            end
+            return value if value == expected_value or expected_value.nil?
           end
           # do we have more to recurse through?
           keep_going = nil
-          if value.is_a? Hash
-            keep_going = value                  # hash, keep going
-          elsif value.is_a? Array
-            keep_going = value                  # an array, keep going
+          if value.is_a? Hash or value.is_a? Array
+            keep_going = value                  # hash or array, keep going
           elsif value.nil? and key.is_a? Hash
             keep_going = key                    # the array was passed in and now in the key, keep going
           end
@@ -43,7 +39,8 @@ module APIMatchers
           end
 
         end
-        raise ::APIMatchers::Core::Exceptions::KeyNotFound.new( "key was not found" ) # we did not find the requested key
+         # we did not find the requested key
+        raise ::APIMatchers::Core::Exceptions::KeyNotFound.new("key was not found")
       end
     end
   end
