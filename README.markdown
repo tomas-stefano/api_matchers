@@ -77,7 +77,7 @@ You can configure if you want xml(**JSON is the default**):
       APIMatchers.setup do |config|
         config.content_type = :xml
       end
-```ruby
+```
 
 ```ruby
     '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status)
