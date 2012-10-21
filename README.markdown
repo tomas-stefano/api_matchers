@@ -113,7 +113,7 @@ You can configure the name of the method for example:
 ```ruby
       ## YOU can do this
       APIMatchers.setup do |config|
-        config.body_method = :body
+        config.response_body_method = :body
       end
 ```
 
