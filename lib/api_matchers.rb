@@ -39,6 +39,7 @@ module APIMatchers
     autoload :Setup, 'api_matchers/core/setup'
     autoload :Exceptions, 'api_matchers/core/exceptions'
   end
+  include ::APIMatchers::Core::Exceptions
 
   def self.setup
     yield(::APIMatchers::Core::Setup)

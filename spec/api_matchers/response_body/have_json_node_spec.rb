@@ -61,7 +61,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
       it "should not parse the matcher for json when you pass a xml" do
         expect {
           "<product><name>webdesk</name></product>".should have_json_node(:name).with('webdesk')
-        }.to fail_with(%Q{expected to have node called: 'name' with value: 'webdesk'. Got: '<product><name>webdesk</name></product>'})
+        }.to raise_error(APIMatchers::InvalidJSON, "Invalid JSON: '<product><name>webdesk</name></product>'")
       end
     end
 

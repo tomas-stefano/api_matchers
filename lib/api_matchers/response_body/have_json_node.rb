@@ -6,31 +6,25 @@ module APIMatchers
     class HaveJsonNode < Base
       def matches?(actual)
         @actual = actual
-        json = begin
-          JSON.parse(response_body)
-        rescue
-          {}
-        end
 
         begin
-          options = {}
-          options[:node] = @expected_node.to_s
-          unless @with_value.nil?
-            options[:value] = @with_value
-          end
-
-          node = Core::FindInJSON.new(json).find( options )
+          node = Core::FindInJSON.new(json).find(node: @expected_node.to_s, value: @with_value)
 
           if @expected_including_text
             node.to_s.include?(@expected_including_text)
           else
-            # the node is present
-            true
+            true # the node is present
           end
-        rescue ::APIMatchers::Core::Exceptions::KeyNotFound
+        rescue ::APIMatchers::KeyNotFound
           # the key was not found
           false
         end
+      end
+
+      def json
+        JSON.parse(response_body)
+      rescue JSON::ParserError => exception
+        raise ::APIMatchers::InvalidJSON.new("Invalid JSON: '#{response_body}'")
       end
     end
   end
