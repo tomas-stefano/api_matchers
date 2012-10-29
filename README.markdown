@@ -50,7 +50,7 @@ Or if node exist with a value:
 ```
 
 ```ruby
-    '{ "error": "not_authorized", "transaction": { "id": "55" } }'.should have_node(:error).with('not_authorized')
+    '{ "error": "not_authorized" }'.should have_node(:error).with('not_authorized')
 ```
 
 ```ruby
