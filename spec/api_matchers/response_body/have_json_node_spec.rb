@@ -224,6 +224,32 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
     end
   end
 
+  describe "some assumptions" do
+    it "shouldn't fail" do
+      '{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:transaction)
+    end
+
+    it "also shouldn't fail" do
+      '{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:id).with(54)
+    end
+
+    it "should have json node including text" do
+      '{"error": "Transaction error: Name cant be blank"}'.should have_json_node(:error).including_text("Transaction error")
+    end
+
+    it "should have json node with boolean value" do
+      '{"creditcard": true}'.should have_json_node(:creditcard).with(true)
+    end
+
+    it "should have json node with value" do
+      '{ "error": "not_authorized", "transaction": { "id": "55" } }'.should have_node(:error).with('not_authorized')
+    end
+
+    it "should have json node with integer" do
+      '{"parcels": 1 }'.should have_node(:parcels).with(1)
+    end
+  end
+
   describe "with change configuration" do
     before do
       APIMatchers.setup { |config| config.response_body_method = :response_body }

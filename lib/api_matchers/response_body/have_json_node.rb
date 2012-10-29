@@ -16,8 +16,7 @@ module APIMatchers
             true # the node is present
           end
         rescue ::APIMatchers::KeyNotFound
-          # the key was not found
-          false
+          false # the key was not found
         end
       end
 

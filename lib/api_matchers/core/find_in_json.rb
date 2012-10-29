@@ -23,6 +23,7 @@ module APIMatchers
 
             return value if value == expected_value or expected_value.nil?
           end
+
           # do we have more to recurse through?
           keep_going = nil
           if value.is_a? Hash or value.is_a? Array

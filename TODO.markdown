@@ -1,0 +1,1 @@
+* Refactor Core::FindInJSON#find method.

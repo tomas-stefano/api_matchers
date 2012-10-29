@@ -40,17 +40,17 @@ The have_node matcher parse the actual and see if have the expcted node with the
 You can verify if node exists:
 
 ```ruby
-      "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:transaction)
+      '{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:transaction)
 ```
 
 Or if node exist with a value:
 
 ```ruby
-    "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_node(:id).with(54)
+    '{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:id).with(54)
 ```
 
 ```ruby
-    "{ 'error': 'not_authorized', 'transaction': { 'id': '55' } }".should have_node(:error).with('not_authorized')
+    '{ "error": "not_authorized", "transaction": { "id": "55" } }'.should have_node(:error).with('not_authorized')
 ```
 
 ```ruby
@@ -126,7 +126,7 @@ Then you can use *without* call the **#body** method:
 ### Have JSON Node Matcher
 
 ```ruby
-    "{ 'transaction': { 'id': '54', 'status': 'paid' } }".should have_json_node(:id).with(54)
+    '{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:id).with(54)
 ```
 
 ### Have XML Node Matcher
