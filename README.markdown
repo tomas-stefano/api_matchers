@@ -71,7 +71,7 @@ You can verify boolean values too:
 
 ### HAVE NODE Matcher Configuration
 
-You can configure if you want xml(**JSON is the default**):
+You can configure if you want xml (JSON is the default):
 
 ```ruby
       APIMatchers.setup do |config|
