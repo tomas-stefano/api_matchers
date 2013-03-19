@@ -12,6 +12,7 @@ module APIMatchers
     autoload :BeBadRequest, 'api_matchers/http_status_code/be_bad_request'
     autoload :BeInternalServerError, 'api_matchers/http_status_code/be_internal_server_error'
     autoload :BeUnauthorized, 'api_matchers/http_status_code/be_unauthorized'
+    autoload :BeOk, 'api_matchers/http_status_code/be_ok'
     autoload :CreateResource, 'api_matchers/http_status_code/create_resource'
   end
 
