@@ -14,6 +14,10 @@ module APIMatchers
       ::APIMatchers::HTTPStatusCode::BeUnauthorized.new(::APIMatchers::Core::Setup)
     end
 
+    def be_ok
+      ::APIMatchers::HTTPStatusCode::BeOk.new(::APIMatchers::Core::Setup)
+    end
+
     def create_resource
       ::APIMatchers::HTTPStatusCode::CreateResource.new(::APIMatchers::Core::Setup)
     end
