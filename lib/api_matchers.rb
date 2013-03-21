@@ -10,6 +10,7 @@ module APIMatchers
   module HTTPStatusCode
     autoload :Base, 'api_matchers/http_status_code/base'
     autoload :BeBadRequest, 'api_matchers/http_status_code/be_bad_request'
+    autoload :BeNotFound, 'api_matchers/http_status_code/be_not_found'
     autoload :BeInternalServerError, 'api_matchers/http_status_code/be_internal_server_error'
     autoload :BeUnauthorized, 'api_matchers/http_status_code/be_unauthorized'
     autoload :BeOk, 'api_matchers/http_status_code/be_ok'
