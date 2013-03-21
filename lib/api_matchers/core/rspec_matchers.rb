@@ -5,6 +5,10 @@ module APIMatchers
     end
     alias :be_a_bad_request :be_bad_request
 
+    def be_not_found
+      ::APIMatchers::HTTPStatusCode::BeNotFound.new(::APIMatchers::Core::Setup)
+    end
+
     def be_internal_server_error
       ::APIMatchers::HTTPStatusCode::BeInternalServerError.new(::APIMatchers::Core::Setup)
     end
