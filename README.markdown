@@ -2,19 +2,25 @@
 
 Collection of RSpec matchers for create your API.
 
-## Matchers
+## Response Body Matchers
 
-* be_in_xml
-* be_a_json
+* have_node
+* have_json_node
+* have_xml_node
+
+# Response Status Matchers
+
+* be_ok_
 * create_resource
 * be_a_bad_request
 * be_unauthorized
 * be_internal_server_error
-* have_node
-* have_json_node
-* have_xml_node
-* be_json_eql
-* be_xml_eql
+* be_not_found
+
+# Other Matcher
+
+* be_in_xml
+* be_a_json
 
 ## Install
 
