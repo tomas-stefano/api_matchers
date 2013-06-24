@@ -188,6 +188,7 @@ Then you can use without call the **#status** method:
 
 This configurations affects this matchers:
 
+* be_ok
 * create_resource
 * be_a_bad_request
 * be_internal_server_error
