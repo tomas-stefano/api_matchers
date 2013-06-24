@@ -192,6 +192,7 @@ This configurations affects this matchers:
 * be_a_bad_request
 * be_internal_server_error
 * be_unauthorized
+* be_not_found
 
 ### Be in XML Matcher
 
