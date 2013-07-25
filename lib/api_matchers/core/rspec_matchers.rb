@@ -46,6 +46,10 @@ module APIMatchers
       ::APIMatchers::ResponseBody::HaveXmlNode.new(expected_node: expected_node, setup: ::APIMatchers::Core::Setup)
     end
 
+    def have_json(expected_json)
+      ::APIMatchers::ResponseBody::HaveJson.new(expected_json)
+    end
+
     def have_node(expected_node)
       if ::APIMatchers::Core::Setup.have_node_matcher.equal?(:json)
         have_json_node(expected_node)

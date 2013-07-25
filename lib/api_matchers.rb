@@ -30,6 +30,7 @@ module APIMatchers
   module ResponseBody
     autoload :Base, 'api_matchers/response_body/base'
     autoload :HaveJsonNode, 'api_matchers/response_body/have_json_node'
+    autoload :HaveJson, 'api_matchers/response_body/have_json'
     autoload :HaveXmlNode,  'api_matchers/response_body/have_xml_node'
     autoload :HaveNode, 'api_matchers/response_body/have_node'
   end
