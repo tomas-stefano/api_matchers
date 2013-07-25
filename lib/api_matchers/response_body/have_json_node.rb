@@ -4,6 +4,8 @@ require 'active_support/core_ext/hash'
 module APIMatchers
   module ResponseBody
     class HaveJsonNode < Base
+      include APIMatchers::Core::Parser
+
       def matches?(actual)
         @actual = actual
 
@@ -18,12 +20,6 @@ module APIMatchers
         rescue ::APIMatchers::KeyNotFound
           false # the key was not found
         end
-      end
-
-      def json
-        JSON.parse(response_body)
-      rescue JSON::ParserError => exception
-        raise ::APIMatchers::InvalidJSON.new("Invalid JSON: '#{response_body}'")
       end
     end
   end

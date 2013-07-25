@@ -38,6 +38,7 @@ module APIMatchers
   #
   module Core
     autoload :FindInJSON, 'api_matchers/core/find_in_json'
+    autoload :Parser, 'api_matchers/core/parser'
     autoload :Setup, 'api_matchers/core/setup'
     autoload :Exceptions, 'api_matchers/core/exceptions'
   end
