@@ -20,7 +20,6 @@ module APIMatchers
                 expected_value = expected_value.to_datetime.to_s
               end
             end
-
             return value if value == expected_value or expected_value.nil?
           end
 
