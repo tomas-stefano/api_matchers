@@ -63,6 +63,33 @@ describe APIMatchers::ResponseBody::HaveXmlNode do
         }.to fail_with(%Q{expected to have node called: 'message' including text: 'Fox on the run'. Got: '<error><message>Transaction error: Name can't be blank</message></error>'})
       end
     end
+
+    context "find matching node when multiple records" do
+      it "should pass when the expected is included in the actual (1 level)" do
+        %{<messages>
+          <message><id>4</id></message>
+          <message><id>2</id></message>
+        </messages>}.should have_xml_node(:id).with(2)
+      end
+      it "should fail when the expected is not included in the actual (1 level)" do
+        %{<messages>
+          <message><id>4</id></message>
+          <message><id>2</id></message>
+        </messages>}.should_not have_xml_node(:id).with(3)
+      end
+      it "should pass when the expected is included in the actual (2 levels)" do
+        %{<messages>
+          <message><header><id>4</id></header></message>
+          <message><header><id>2</id></header></message>
+        </messages>}.should have_xml_node(:id).with(2)
+      end
+      it "should fail when the expected is not included in the actual (2 levels)" do
+        %{<messages>
+          <message><header><id>4</id></header></message>
+          <message><header><id>2</id></header></message>
+        </messages>}.should_not have_xml_node(:id).with(3)
+      end
+    end
   end
 
   describe "actual.should_not have_xml_node" do
