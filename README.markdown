@@ -10,7 +10,7 @@ Collection of RSpec matchers for create your API.
 
 # Response Status Matchers
 
-* be_ok_
+* be_ok
 * create_resource
 * be_a_bad_request
 * be_unauthorized
@@ -20,7 +20,7 @@ Collection of RSpec matchers for create your API.
 # Other Matcher
 
 * be_in_xml
-* be_a_json
+* be_in_json
 
 ## Install
 
