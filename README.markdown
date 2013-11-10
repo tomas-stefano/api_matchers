@@ -1,30 +1,39 @@
 # API Matchers
 
-Collection of RSpec matchers for create your API.
+Collection of RSpec matchers for your API.
 
 ## Response Body Matchers
 
-* have_node
-* have_json_node
-* have_xml_node
+* `have_node`
+* `have_json_node`
+* `have_xml_node`
 
 # Response Status Matchers
 
-* be_ok_
-* create_resource
-* be_a_bad_request
-* be_unauthorized
-* be_internal_server_error
-* be_not_found
+* `be_ok`
+* `create_resource`
+* `be_a_bad_request`
+* `be_unauthorized`
+* `be_internal_server_error`
+* `be_not_found`
 
-# Other Matcher
+# Other Matchers
 
-* be_in_xml
-* be_a_json
+* `be_in_xml`
+* `be_in_json`
 
 ## Install
 
-      gem install api_matchers
+Include the gem to your test group in you Gemfile:
+
+```ruby
+group :test do
+  gem 'api_matchers'
+  # other gems
+end
+```
+
+Or install it manually: `gem install api_matchers`.
 
 ## Usage
 
@@ -33,9 +42,9 @@ Collection of RSpec matchers for create your API.
 To include all this matchers you need to include the APIMatchers::RSpecMatchers module:
 
 ```ruby
-    RSpec.configure do |config|
-      config.include APIMatchers::RSpecMatchers
-    end
+RSpec.configure do |config|
+  config.include APIMatchers::RSpecMatchers
+end
 ```
 
 ### Have Node Matcher
@@ -46,33 +55,33 @@ The have_node matcher parse the actual and see if have the expcted node with the
 You can verify if node exists:
 
 ```ruby
-      '{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:transaction)
+'{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:transaction)
 ```
 
 Or if node exist with a value:
 
 ```ruby
-    '{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:id).with(54)
+'{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:id).with(54)
 ```
 
 ```ruby
-    '{ "error": "not_authorized" }'.should have_node(:error).with('not_authorized')
+'{ "error": "not_authorized" }'.should have_node(:error).with('not_authorized')
 ```
 
 ```ruby
-   '{"parcels":1 }'.should have_node(:parcels).with(1)
+'{"parcels":1 }'.should have_node(:parcels).with(1)
 ```
 
 To see the json node and see if include a text, you can do this:
 
 ```ruby
-    '{"error": "Transaction error: Name cant be blank"}'.should have_node(:error).including_text("Transaction error")
+'{"error": "Transaction error: Name cant be blank"}'.should have_node(:error).including_text("Transaction error")
 ```
 
 You can verify boolean values too:
 
 ```ruby
-   '{"creditcard":true}'.should have_node(:creditcard).with(true)
+'{"creditcard":true}'.should have_node(:creditcard).with(true)
 ```
 
 ### HAVE NODE Matcher Configuration
@@ -80,65 +89,59 @@ You can verify boolean values too:
 You can configure if you want xml (JSON is the default):
 
 ```ruby
-      APIMatchers.setup do |config|
-        config.content_type = :xml
-      end
+APIMatchers.setup do |config|
+  config.content_type = :xml
+end
 ```
 
 ```ruby
-    '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status)
+'<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status)
 ```
 
-Using the with method:
+Using the `with` method:
 
 ```ruby
-    '<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
+'<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
 ```
 
-Or you can use the **have_xml_node** matcher:
+Or you can use the `have_xml_node` matcher:
 
 ```ruby
-    "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).with("Transaction error: Name can't be blank")
+"<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).with("Transaction error: Name can't be blank")
 ```
 
 To see the xml node and see if include a text, you can do this:
 
 ```ruby
-    "<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).including_text("Transaction error")
+"<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).including_text("Transaction error")
 ```
 
-**If you work with xml and json in the same API, I recommend that you check the have_json_node and have_xml_node matchers.**
+**If you work with xml and json in the same API, check the have_json_node and have_xml_node matchers.**
 
-You can configure the name of the method for example:
+You can configure the name of the method and then you will be able to use *without* the **#body** method, for example:
 
 ```ruby
-      ## Instead of this
-      response.body.should have_node(:foo)
+APIMatchers.setup do |config|
+  config.response_body_method = :body
+end
+
+response.should have_node(:foo).with('bar')
 ```
 
-```ruby
-      ## YOU can do this
-      APIMatchers.setup do |config|
-        config.response_body_method = :body
-      end
-```
-
-Then you can use *without* call the **#body** method:
-
-```ruby
-      response.should have_node(:foo).with('bar')
+# Instead of:
+response.body.should have_node(:foo)
 ```
 
 ### Have JSON Node Matcher
 
 ```ruby
-    '{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:id).with(54)
+'{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:id).with(54)
 ```
 
 ### Have XML Node Matcher
 
 ```ruby
-    "<product><name>gateway</name></product>".should have_xml_node(:name).with('gateway')
+"<product><name>gateway</name></product>".should have_xml_node(:name).with('gateway')
 ```
 
 ### Create Resource Matcher
@@ -146,7 +149,7 @@ Then you can use *without* call the **#body** method:
 This matchers see the HTTP STATUS CODE is equal to 201.
 
 ```ruby
-     response.status.should create_resource
+response.status.should create_resource
 ```
 
 ### BAD REQUEST Matcher
@@ -154,8 +157,8 @@ This matchers see the HTTP STATUS CODE is equal to 201.
 This BAD REQUEST is a matcher that see if the HTTP STATUS code is equal to 400.
 
 ```ruby
-    response.status.should be_a_bad_request
-    response.status.should be_bad_request
+response.status.should be_a_bad_request
+response.status.should be_bad_request
 ```
 
 ### UNAUTHORIZED Matcher
@@ -163,8 +166,8 @@ This BAD REQUEST is a matcher that see if the HTTP STATUS code is equal to 400.
 This UNAUTHORIZED is a matcher that see if the HTTP STATUS code is equal to 401.
 
 ```ruby
-    response.status.should be_unauthorized
-    response.body.should have_node(:message).with('Invalid Credentials')
+response.status.should be_unauthorized
+response.body.should have_node(:message).with('Invalid Credentials')
 ```
 
 ### INTERNAL SERVER ERROR Matcher
@@ -172,8 +175,8 @@ This UNAUTHORIZED is a matcher that see if the HTTP STATUS code is equal to 401.
 This INTERNAL SERVER Error is a matcher that see if the HTTP STATUS code is equal to 500.
 
 ```ruby
-    response.status.should be_internal_server_error
-    response.body.should have_node(:message).with('An Internal Error Occurs in our precious app. :S')
+response.status.should be_internal_server_error
+response.body.should have_node(:message).with('An Internal Error Occurs in our precious app. :S')
 ```
 
 ### HTTP STATUS CODE Configuration
@@ -181,32 +184,32 @@ This INTERNAL SERVER Error is a matcher that see if the HTTP STATUS code is equa
 You can configure the name method to call the http status code:
 
 ```ruby
-     APIMatchers.setup do |config|
-       config.http_status_method = :status
-     end
+APIMatchers.setup do |config|
+  config.http_status_method = :status
+end
 ```
 
 Then you can use without call the **#status** method:
 
 ```ruby
-    response.should create_resource
+response.should create_resource
 ```
 
 This configurations affects this matchers:
 
-* be_ok
-* create_resource
-* be_a_bad_request
-* be_internal_server_error
-* be_unauthorized
-* be_not_found
+* `be_ok`
+* `create_resource`
+* `be_a_bad_request`
+* `be_internal_server_error`
+* `be_unauthorized`
+* `be_not_found`
 
 ### Be in XML Matcher
 
 This is a matcher that see if the content type is xml:
 
 ```ruby
-    response.headers['Content-Type'].should be_in_xml
+response.headers['Content-Type'].should be_in_xml
 ```
 
 ### Be in JSON Matcher
@@ -214,7 +217,7 @@ This is a matcher that see if the content type is xml:
 This is a matcher that see if the content type is in JSON:
 
 ```ruby
-    response.headers['Content-Type'].should be_in_json
+response.headers['Content-Type'].should be_in_json
 ```
 
 ### Headers Configuration
@@ -222,17 +225,17 @@ This is a matcher that see if the content type is in JSON:
 You can configure the name method to call the headers and content type:
 
 ```ruby
-    APIMatchers.setup do |config|
-      config.header_method           = :headers
-      config.header_content_type_key = 'Content-Type'
-    end
+APIMatchers.setup do |config|
+  config.header_method           = :headers
+  config.header_content_type_key = 'Content-Type'
+end
 ```
 
-Then you can use without call the **#headers** calling the **#['Content-Type']** method:
+And then you will be able to use without call the **#headers** calling the **#['Content-Type']** method:
 
 ```ruby
-    response.should be_in_json
-    response.should be_in_xml
+response.should be_in_json
+response.should be_in_xml
 ```
 
 ### Acknowlegments
@@ -242,3 +245,4 @@ Then you can use without call the **#headers** calling the **#['Content-Type']**
 ### Contributors
 
 * Stephen Orens
+* Lucas Caton
