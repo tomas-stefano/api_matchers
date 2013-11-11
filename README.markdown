@@ -8,7 +8,7 @@ Collection of RSpec matchers for your API.
 * `have_json_node`
 * `have_xml_node`
 
-# Response Status Matchers
+## Response Status Matchers
 
 * `be_ok`
 * `create_resource`
@@ -17,7 +17,7 @@ Collection of RSpec matchers for your API.
 * `be_internal_server_error`
 * `be_not_found`
 
-# Other Matchers
+## Other Matchers
 
 * `be_in_xml`
 * `be_in_json`
