@@ -7,7 +7,8 @@ module APIMatchers
         value = false
         @actual = actual
         xml = Nokogiri::XML(response_body)
-        node_set = xml.css("//#{@expected_node}")
+
+        node_set = xml.xpath("//#{@expected_node}")
         if node_set
           node_set.each do |node|
             if @with_value
