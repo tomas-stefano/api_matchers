@@ -6,6 +6,10 @@ describe APIMatchers::ResponseBody::HaveJson do
       it 'equal json' do
         ['Petshop', 'Dogs'].to_json.should have_json(['Petshop', 'Dogs'])
       end
+
+      it 'compares with Hash too' do
+        { 'offers' => [10, 90] }.to_json.should have_json({ 'offers' => [10,90] })
+      end
     end
 
     context 'when fails' do
