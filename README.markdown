@@ -7,6 +7,7 @@ Collection of RSpec matchers for your API.
 * `have_node`
 * `have_json_node`
 * `have_xml_node`
+* `have_json`
 
 ## Response Status Matchers
 
@@ -142,6 +143,14 @@ response.body.should have_node(:foo)
 
 ```ruby
 "<product><name>gateway</name></product>".should have_xml_node(:name).with('gateway')
+```
+
+### Have JSON Matcher
+
+Sometimes, you want to compare the entire JSON structure:
+
+```ruby
+"['Foo', 'Bar', 'Baz']".should have_json(['Foo', 'Bar', 'Baz'])
 ```
 
 ### Create Resource Matcher
