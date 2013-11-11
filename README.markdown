@@ -1,4 +1,4 @@
-# API Matchers
+# API Matchers [![Build Status](https://travis-ci.org/tomas-stefano/api_matchers.png?branch=master)](https://travis-ci.org/tomas-stefano/api_matchers)
 
 Collection of RSpec matchers for your API.
 
