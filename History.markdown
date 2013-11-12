@@ -1,3 +1,8 @@
+## v0.4.0
+
+* jRuby support;
+* have_json matcher;
+
 ## v0.1.1
 
 1) Support Datetime, Date and Time comparison (Thanks to Stephen Orens).
