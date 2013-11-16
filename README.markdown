@@ -129,7 +129,9 @@ end
 response.should have_node(:foo).with('bar')
 ```
 
-# Instead of:
+Instead of:
+
+```ruby
 response.body.should have_node(:foo)
 ```
 
