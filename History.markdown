@@ -1,3 +1,7 @@
+## development
+
+* Internals - Migrate to the RSpec expect syntax.
+
 ## v0.4.0
 
 * jRuby support;
