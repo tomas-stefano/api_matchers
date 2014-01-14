@@ -7,7 +7,7 @@ describe APIMatchers::ResponseBody::HaveNode do
     end
 
     it "should parse the matcher for json" do
-      { :product => 'chat' }.to_json.should have_node(:product).with('chat')
+      expect({ :product => 'chat' }.to_json).to have_node(:product).with('chat')
     end
   end
 
@@ -17,7 +17,7 @@ describe APIMatchers::ResponseBody::HaveNode do
     end
 
     it "should parse the matcher for xml" do
-      "<product>chat</product>".should have_node(:product).with('chat')
+      expect("<product>chat</product>").to have_node(:product).with('chat')
     end
 
     after do

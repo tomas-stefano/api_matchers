@@ -14,13 +14,13 @@ describe APIMatchers::ResponseBody::Base do
 
   describe "#setup" do
     it "should read from the initialize" do
-      subject.setup.should equal setup
+      expect(subject.setup).to equal setup
     end
   end
 
   describe "#expected_node" do
     it "should read from the initialize" do
-      subject.expected_node.should equal :status
+      expect(subject.expected_node).to equal :status
     end
   end
 
@@ -30,7 +30,7 @@ describe APIMatchers::ResponseBody::Base do
     context 'when have configuration' do
       it "should call the method when is config" do
         subject.actual = OpenStruct.new(:body => body)
-        subject.response_body.should eql body
+        expect(subject.response_body).to eql body
       end
     end
 
@@ -40,7 +40,7 @@ describe APIMatchers::ResponseBody::Base do
 
       it "should return the actual when do not have config" do
         subject.actual = body
-        subject.response_body.should eql body
+        expect(subject.response_body).to eql body
       end
     end
   end

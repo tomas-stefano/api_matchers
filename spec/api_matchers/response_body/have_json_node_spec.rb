@@ -1,82 +1,82 @@
 require 'spec_helper'
 
 describe APIMatchers::ResponseBody::HaveJsonNode do
-  describe "actual.should have_json_node" do
+  describe "actual).to have_json_node" do
     context 'expected key and value in top level' do
       it "pass when the expected key exist" do
-        { :product => 'gateway' }.to_json.should have_json_node(:product)
+        expect({ :product => 'gateway' }.to_json).to have_json_node(:product)
       end
 
       it "fail when the expected key does not exist" do
         expect {
-          { :product => 'pabx' }.to_json.should have_json_node(:developers)
+          expect({ :product => 'pabx' }.to_json).to have_json_node(:developers)
         }.to fail_with(%Q{expected to have node called: 'developers'. Got: '{"product":"pabx"}'})
       end
 
       it "pass when the expected key exist with the expected value" do
-        { :product => 'payment-gateway' }.to_json.should have_json_node(:product).with('payment-gateway')
+        expect({ :product => 'payment-gateway' }.to_json).to have_json_node(:product).with('payment-gateway')
       end
 
       it "pass when the expected key exist with the expected value (as integer)" do
-        { :number => 1 }.to_json.should have_json_node(:number).with(1)
+        expect({ :number => 1 }.to_json).to have_json_node(:number).with(1)
       end
 
       it "pass when the expected key exist with the expected value (as boolean, true)" do
-        { :number => true }.to_json.should have_json_node(:number).with(true)
+        expect({ :number => true }.to_json).to have_json_node(:number).with(true)
       end
 
       it "pass when the expected key exist with the expected value (as boolean, false)" do
-        { :number => false }.to_json.should have_json_node(:number).with(false)
+        expect({ :number => false }.to_json).to have_json_node(:number).with(false)
       end
 
       it "pass when the expected key exist but the expected value is wrong (as boolean, true)" do
-        { :number => true }.to_json.should_not have_json_node(:number).with(false)
+        expect({ :number => true }.to_json).not_to have_json_node(:number).with(false)
       end
 
       it "pass when the expected key exist but the expected value is wrong (as boolean, false)" do
-        { :number => false }.to_json.should_not have_json_node(:number).with(true)
+        expect({ :number => false }.to_json).not_to have_json_node(:number).with(true)
       end
 
       it "pass when the expected key exists with the expected value (as DateTime)" do
         now = DateTime.now
-        { :date => now }.to_json.should have_json_node(:date).with(now)
+        expect({ :date => now }.to_json).to have_json_node(:date).with(now)
       end
 
       it "pass when the expected key exists with the expected value (as Date)" do
         now = Date.today
-        { :date => now }.to_json.should have_json_node(:date).with(now)
+        expect({ :date => now }.to_json).to have_json_node(:date).with(now)
       end
 
       it "pass when the expected key exists with the expected value (as Time)" do
         now = Time.now
-        { :time => now }.to_json.should have_json_node(:time).with(now)
+        expect({ :time => now }.to_json).to have_json_node(:time).with(now)
       end
 
       it "fail when the expected key exist but the expected value don't exist" do
         expect {
-          { :product => 'payment-gateway' }.to_json.should have_json_node(:product).with('email-marketing')
+          expect({ :product => 'payment-gateway' }.to_json).to have_json_node(:product).with('email-marketing')
         }.to fail_with(%Q{expected to have node called: 'product' with value: 'email-marketing'. Got: '{"product":"payment-gateway"}'})
       end
 
       it "not parse the matcher for json when you pass a xml" do
         expect {
-          "<product><name>webdesk</name></product>".should have_json_node(:name).with('webdesk')
+          expect("<product><name>webdesk</name></product>").to have_json_node(:name).with('webdesk')
         }.to raise_error(APIMatchers::InvalidJSON, "Invalid JSON: '<product><name>webdesk</name></product>'")
       end
     end
 
     context 'expected key and nil value' do
       it "pass when the expected key exists" do
-        { :product => nil }.to_json.should have_json_node(:product)
+        expect({ :product => nil }.to_json).to have_json_node(:product)
       end
 
       it "pass when the expected key exists and the expected value is nil" do
-        { :product => nil }.to_json.should have_json_node(:product).with( nil )
+        expect({ :product => nil }.to_json).to have_json_node(:product).with( nil )
       end
 
       it "fail when the expected key exist but the expected value don't exist" do
         expect {
-          { :product => nil }.to_json.should have_json_node(:product).with('email-marketing')
+          expect({ :product => nil }.to_json).to have_json_node(:product).with('email-marketing')
         }.to fail_with(%Q{expected to have node called: 'product' with value: 'email-marketing'. Got: '{"product":null}'})
       end
     end
@@ -84,141 +84,145 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
     context 'expected key and value in more deep in the JSON' do
       context '.to_json used' do
         it "pass when the expected key exist" do
-          { :transaction => { :id => 150 } }.to_json.should have_json_node(:id)
+          expect({ :transaction => { :id => 150 } }.to_json).to have_json_node(:id)
         end
 
         it "pass when the expected key and expected value exist" do
-          { :transaction => { :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('999')
+          expect({ :transaction => { :error => { :code => '999' } } }.to_json).to have_json_node(:code).with('999')
         end
 
         it "pass when the expected key and expected value exist in very deep" do
-          { :first=>"A", :second=>nil, :third=>{ :stuff => { :first_stuff=>{ :color=>"green", :size=>"small", :shape=>"circle", :uid=>"first_stuff"}, :second_stuff=>{ :color=>"blue", :size=>"large", :shape=>"square", :uid=>"second_stuff"}}, :junk=>[{"name"=>"junk_one", :uid=>"junk_one", :stuff_uid=>"first_stuff"}, { :name=>"junk_two", :uid=>"junk_two", :stuff_uid=>"second_stuff"}]}}.to_json.should have_json_node( :junk )
+          expect({ :first=>"A", :second=>nil, :third=>{ :stuff => { :first_stuff=>{ :color=>"green", :size=>"small", :shape=>"circle", :uid=>"first_stuff"}, :second_stuff=>{ :color=>"blue", :size=>"large", :shape=>"square", :uid=>"second_stuff"}}, :junk=>[{"name"=>"junk_one", :uid=>"junk_one", :stuff_uid=>"first_stuff"}, { :name=>"junk_two", :uid=>"junk_two", :stuff_uid=>"second_stuff"}]}}.to_json).to have_json_node( :junk )
         end
 
         it "pass when the expected key and expected value exist in very deep" do
-          { :first=>"A", :second=>nil, :third=>{ :stuff => { :first_stuff=>{ :color=>"green", :size=>"small", :shape=>"circle", :uid=>"first_stuff"}, :second_stuff=>{ :color=>"blue", :size=>"large", :shape=>"square", :uid=>"second_stuff"}}, :junk=>[{"name"=>"junk_one", :uid=>"junk_one", :stuff_uid=>"first_stuff"}, { :name=>"junk_two", :uid=>"junk_two", :stuff_uid=>"second_stuff"}]}}.to_json.should have_json_node( :name ).with( "junk_two" )
+          expect({ :first=>"A", :second=>nil, :third=>{ :stuff => { :first_stuff=>{ :color=>"green", :size=>"small", :shape=>"circle", :uid=>"first_stuff"}, :second_stuff=>{ :color=>"blue", :size=>"large", :shape=>"square", :uid=>"second_stuff"}}, :junk=>[{"name"=>"junk_one", :uid=>"junk_one", :stuff_uid=>"first_stuff"}, { :name=>"junk_two", :uid=>"junk_two", :stuff_uid=>"second_stuff"}]}}.to_json).to have_json_node( :name ).with( "junk_two" )
         end
 
         it "fail when the expected key does not exist" do
           expect {
-            { :transaction => { :id => 150, :error => {} } }.to_json.should have_json_node(:code)
+            expect({ :transaction => { :id => 150, :error => {} } }.to_json).to have_json_node(:code)
           }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
         end
 
         it "fail when the expected key exist but don't exist the expected value" do
           expect {
-            { :transaction => { :id => 150, :error => { :code => '999' } } }.to_json.should have_json_node(:code).with('001')
+            expect({ :transaction => { :id => 150, :error => { :code => '999' } } }.to_json).to have_json_node(:code).with('001')
           }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
         end
       end
       context 'json string used' do
         it "pass when the expected key exist" do
-          '{ "transaction": {"id": 150 } }'.should have_json_node(:id)
+          expect('{ "transaction": {"id": 150 } }').to have_json_node(:id)
         end
 
         it "pass when the expected key and expected value exist" do
-          '{ "transaction": {"error": { "code": "999" } } }'.should have_json_node(:code).with('999')
+          expect('{ "transaction": {"error": { "code": "999" } } }').to have_json_node(:code).with('999')
         end
 
         it "pass when the expected key exist with the expected value (as integer)" do
-          '{"number":1 }'.should have_json_node(:number).with(1)
+          expect('{"number":1 }').to have_json_node(:number).with(1)
         end
 
         it "pass when the expected key exist with the expected value (as boolean)" do
-          '{"boolean":true}'.should have_json_node(:boolean).with(true)
+          expect('{"boolean":true}').to have_json_node(:boolean).with(true)
         end
 
         it "pass when the expected key exists with the expected value (as DateTime)" do
           now = DateTime.parse( "2012-09-18T15:42:12-07:00" )
-          '{"date": "2012-09-18T15:42:12-07:00"}'.should have_json_node(:date).with(now)
+          expect('{"date": "2012-09-18T15:42:12-07:00"}').to have_json_node(:date).with(now)
         end
 
         it "pass when the expected key exists with the expected value (as Date)" do
           now = Date.parse( "2012-09-18" )
-          '{"date": "2012-09-18"}'.should have_json_node(:date).with(now)
+          expect('{"date": "2012-09-18"}').to have_json_node(:date).with(now)
         end
 
         it "pass when the expected key exists with the expected value (as Time)" do
           now = Time.parse("2012-09-18T15:42:12Z")
-          '{"time": "2012-09-18T15:42:12+00:00"}'.should have_json_node(:time).with(now)
+          expect('{"time": "2012-09-18T15:42:12+00:00"}').to have_json_node(:time).with(now)
         end
 
         it "pass when the expected key exist with the expected value (as boolean) in a multi node" do
-          '{"uid":"123456","boolean":true}'.should have_json_node(:boolean).with(true)
+          expect('{"uid":"123456","boolean":true}').to have_json_node(:boolean).with(true)
         end
 
         it "pass when the expected key and expected value exist in very deep" do
-          '{"first":"A","second":null,"third":{"stuff":{"first_stuff":{"color":"green","size":"small","shape":"circle","uid":"first_stuff"},"second_stuff":{"color":"blue","size":"large","shape":"square","uid":"second_stuff"}},"junk":[{"name":"junk_one","uid":"junk_one","stuff_uid":"first_stuff"},{"name":"junk_two","uid":"junk_two","stuff_uid":"second_stuff"}]}}'.should have_json_node( :junk )
+          expect('{"first":"A","second":null,"third":{"stuff":{"first_stuff":{"color":"green","size":"small","shape":"circle","uid":"first_stuff"},"second_stuff":{"color":"blue","size":"large","shape":"square","uid":"second_stuff"}},"junk":[{"name":"junk_one","uid":"junk_one","stuff_uid":"first_stuff"},{"name":"junk_two","uid":"junk_two","stuff_uid":"second_stuff"}]}}').to have_json_node( :junk )
         end
 
         it "pass when the expected key and expected value exist in very deep" do
-          '{"first":"A","second":null,"third":{"stuff":{"first_stuff":{"color":"green","size":"small","shape":"circle","uid":"first_stuff"},"second_stuff":{"color":"blue","size":"large","shape":"square","uid":"second_stuff"}},"junk":[{"name":"junk_one","uid":"junk_one","stuff_uid":"first_stuff"},{"name":"junk_two","uid":"junk_two","stuff_uid":"second_stuff"}]}}'.should have_json_node( :name ).with( "junk_two" )
+          expect('{"first":"A","second":null,"third":{"stuff":{"first_stuff":{"color":"green","size":"small","shape":"circle","uid":"first_stuff"},"second_stuff":{"color":"blue","size":"large","shape":"square","uid":"second_stuff"}},"junk":[{"name":"junk_one","uid":"junk_one","stuff_uid":"first_stuff"},{"name":"junk_two","uid":"junk_two","stuff_uid":"second_stuff"}]}}').to have_json_node( :name ).with( "junk_two" )
         end
 
         it "pass when the expected key and including text exist" do
-          '{"Key":"A=123456-abcdef-09876-ghijkl; path=/; expires=Sun, 05-Sep-2032 05:50:39 GMT\nB=ABCDEF123456; path=/; expires=Sun, 05-Sep-2032 05:50:39 GMT", "Content-Type":"application/json; charset=utf-8"}'.should have_json_node( "Key" ).including_text( "123456-abcdef-09876-ghijkl" )
+          expect('{"Key":"A=123456-abcdef-09876-ghijkl; path=/; expires=Sun, 05-Sep-2032 05:50:39 GMT\nB=ABCDEF123456; path=/; expires=Sun, 05-Sep-2032 05:50:39 GMT", "Content-Type":"application/json; charset=utf-8"}').to have_json_node( "Key" ).including_text( "123456-abcdef-09876-ghijkl" )
         end
 
         it "fail when the expected key does not exist" do
           expect {
-            '{"transaction":{"id":150,"error":{}}}'.should have_json_node(:code)
+            expect('{"transaction":{"id":150,"error":{}}}').to have_json_node(:code)
           }.to fail_with(%Q{expected to have node called: 'code'. Got: '{"transaction":{"id":150,"error":{}}}'})
         end
 
         it "fail when the expected key exist but don't exist the expected value" do
           expect {
-            '{"transaction":{"id":150,"error":{"code":"999"}}}'.should have_json_node(:code).with('001')
+            expect('{"transaction":{"id":150,"error":{"code":"999"}}}').to have_json_node(:code).with('001')
           }.to fail_with(%Q{expected to have node called: 'code' with value: '001'. Got: '{"transaction":{"id":150,"error":{"code":"999"}}}'})
         end
       end
     end
 
     context "including_text" do
+      let(:json) do
+        { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json
+      end
+
       it "pass when the expected is included in the actual" do
-        { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should have_json_node(:message).including_text("Transaction error")
+        expect({ :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json).to have_json_node(:message).including_text("Transaction error")
       end
 
       it "fail when the expected is not included in the actual" do
         expect {
-          { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should have_json_node(:message).including_text("Fox on the run")
+          expect(json).to have_json_node(:message).including_text("Fox on the run")
         }.to fail_with(%Q{expected to have node called: 'message' including text: 'Fox on the run'. Got: '{"transaction":{"error":{"message":"Transaction error: Name can't be blank"}}}'})
       end
     end
   end
 
-  describe "actual.should_not have_json_node" do
+  describe "actual).not_to have_json_node" do
     it "pass when don't have the expected node in root level" do
-      { :product => 'gateway' }.to_json.should_not have_json_node(:status)
+      expect({ :product => 'gateway' }.to_json).not_to have_json_node(:status)
     end
 
     it "pass when don't have the expected node in any level" do
-      { :transaction => { :id => 12, :status => 'paid' } }.to_json.should_not have_json_node(:error)
+      expect({ :transaction => { :id => 12, :status => 'paid' } }.to_json).not_to have_json_node(:error)
     end
 
     it "fail when the expected key exist" do
       expect {
-        { :status => 'paid' }.to_json.should_not have_json_node(:status)
+        expect({ :status => 'paid' }.to_json).not_to have_json_node(:status)
       }.to fail_with(%Q{expected to NOT have node called: 'status'. Got: '{"status":"paid"}'})
     end
 
     it "pass when have the expected key but have a different value" do
-      { :status => 'paid' }.to_json.should_not have_json_node(:status).with('not_authorized')
+      expect({ :status => 'paid' }.to_json).not_to have_json_node(:status).with('not_authorized')
     end
 
     it "fail when have the expected key and have the expected value" do
       expect {
-        { :status => 'paid' }.to_json.should_not have_json_node(:status).with('paid')
+        expect({ :status => 'paid' }.to_json).not_to have_json_node(:status).with('paid')
       }.to fail_with(%Q{expected to NOT have node called: 'status' with value: 'paid'. Got: '{"status":"paid"}'})
     end
 
     context "including_text" do
       it "pass when the expected is NOT included in the actual" do
-        { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should_not have_json_node(:message).including_text("Love gun")
+        expect({ :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json).not_to have_json_node(:message).including_text("Love gun")
       end
 
       it "fail when the expected is included in the actual" do
         expect {
-          { :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json.should_not have_json_node(:message).including_text("Transaction error")
+          expect({ :transaction => { :error => { :message => "Transaction error: Name can't be blank" } } }.to_json).not_to have_json_node(:message).including_text("Transaction error")
         }.to fail_with(%Q{expected to NOT have node called: 'message' including text: 'Transaction error'. Got: '{"transaction":{"error":{"message":"Transaction error: Name can't be blank"}}}'})
       end
     end
@@ -226,27 +230,27 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
   describe "some assumptions" do
     it "pass when have the json node name" do
-      '{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:transaction)
+      expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_json_node(:transaction)
     end
 
     it "pass when have json node with integer value" do
-      '{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:id).with(54)
+      expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_json_node(:id).with(54)
     end
 
     it "should have json node including text" do
-      '{"error": "Transaction error: Name cant be blank"}'.should have_json_node(:error).including_text("Transaction error")
+      expect('{"error": "Transaction error: Name cant be blank"}').to have_json_node(:error).including_text("Transaction error")
     end
 
     it "pass have json node with boolean value" do
-      '{"creditcard": true}'.should have_json_node(:creditcard).with(true)
+      expect('{"creditcard": true}').to have_json_node(:creditcard).with(true)
     end
 
     it "pass have json node with string" do
-      '{ "error": "not_authorized", "transaction": { "id": "55" } }'.should have_node(:error).with('not_authorized')
+      expect('{ "error": "not_authorized", "transaction": { "id": "55" } }').to have_node(:error).with('not_authorized')
     end
 
     it "pass have json node with integer" do
-      '{"parcels": 1 }'.should have_node(:parcels).with(1)
+      expect('{"parcels": 1 }').to have_node(:parcels).with(1)
     end
   end
 
@@ -261,12 +265,14 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
 
     it "pass if the actual.http_status is equal to 400" do
       response = OpenStruct.new(:response_body => { :foo => :bar }.to_json)
-      response.should have_json_node(:foo).with('bar')
+      expect(response).to have_json_node(:foo).with('bar')
     end
 
     it "fail if the actual.http_status is not equal to 400" do
       response = OpenStruct.new(:response_body => { :baz => :foo}.to_json)
-      expect { response.should have_json_node(:bar) }.to fail_with(%Q{expected to have node called: 'bar'. Got: '{"baz":"foo"}'})
+      expect {
+        expect(response).to have_json_node(:bar)
+      }.to fail_with(%Q{expected to have node called: 'bar'. Got: '{"baz":"foo"}'})
     end
   end
 end

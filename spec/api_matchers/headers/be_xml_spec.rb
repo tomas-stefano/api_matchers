@@ -1,26 +1,26 @@
 require 'spec_helper'
 
 describe APIMatchers::Headers::BeXML do
-  describe "actual.should be_xml" do
+  describe "actual.to be_xml" do
     it "should pass when the actual is json response" do
-      "application/xml; charset=utf-8".should be_xml
+      expect("application/xml; charset=utf-8").to be_xml
     end
 
     it "should not pass when the actual is not a json response" do
       expect {
-        "application/json; charset=utf-8".should be_xml
+        expect("application/json; charset=utf-8").to be_xml
       }.to fail_with(%Q{expected a XML response with 'application/xml; charset=utf-8'. Got: 'application/json; charset=utf-8'.})
     end
   end
 
-  describe "actual.should_not be_xml" do
+  describe "actual.not_to be_xml" do
     it "should pass when the actual is not a json response" do
-      "application/json; charset=utf-8".should_not be_xml
+      expect("application/json; charset=utf-8").not_to be_xml
     end
 
     it "should not pass when the actual is a json response" do
       expect {
-        "application/xml; charset=utf-8".should_not be_xml
+        expect("application/xml; charset=utf-8").not_to be_xml
       }.to fail_with(%Q{expected to not be a XML response. Got: 'application/xml; charset=utf-8'.})
     end
   end
@@ -42,17 +42,21 @@ describe APIMatchers::Headers::BeXML do
 
     it "should pass if the actual.response_header is equal to application/xml" do
       response = OpenStruct.new(:response_header => { 'Content-Type' => "application/xml; charset=utf-8"})
-      response.should be_xml
+      expect(response).to be_xml
     end
 
     it "should fail if the actual.response_header is not equal to application/xml" do
       response = OpenStruct.new(:response_header => { "Content-Type" => "application/json; charset=utf-8"})
-      expect { response.should be_xml }.to fail_with(%Q{expected a XML response with 'application/xml; charset=utf-8'. Got: 'application/json; charset=utf-8'.})
+      expect {
+        expect(response).to be_xml
+      }.to fail_with(%Q{expected a XML response with 'application/xml; charset=utf-8'. Got: 'application/json; charset=utf-8'.})
     end
 
     it "should fail when pass the actual that have headers but not the content type key" do
       response = OpenStruct.new(:response_header => { "foo-baz" => "application/json; charset=utf-8"})
-      expect { response.should be_xml }.to fail_with(%Q{expected a XML response with 'application/xml; charset=utf-8'. Got: '{"foo-baz"=>"application/json; charset=utf-8"}'.})
+      expect {
+        expect(response).to be_xml
+      }.to fail_with(%Q{expected a XML response with 'application/xml; charset=utf-8'. Got: '{"foo-baz"=>"application/json; charset=utf-8"}'.})
     end
   end
 end
