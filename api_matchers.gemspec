@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = APIMatchers::VERSION
 
-  gem.add_dependency 'rspec', '~> 2.14'
+  gem.add_dependency 'rspec', '>= 2.14'
   gem.add_dependency 'activesupport', '>= 3.2.5'
   gem.add_dependency 'nokogiri', '>= 1.5.2'
 end
