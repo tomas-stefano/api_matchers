@@ -22,6 +22,10 @@ module APIMatchers
       ::APIMatchers::HTTPStatusCode::BeOk.new(::APIMatchers::Core::Setup)
     end
 
+    def be_unprocessable_entity
+      ::APIMatchers::HTTPStatusCode::BeUnprocessableEntity.new(::APIMatchers::Core::Setup)
+    end
+
     def create_resource
       ::APIMatchers::HTTPStatusCode::CreateResource.new(::APIMatchers::Core::Setup)
     end
