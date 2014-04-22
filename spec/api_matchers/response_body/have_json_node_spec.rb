@@ -38,7 +38,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
       end
 
       it "pass when the expected key exists with the expected value (as DateTime)" do
-        now = DateTime.now
+        now = DateTime.now.to_s
         expect({ :date => now }.to_json).to have_json_node(:date).with(now)
       end
 
@@ -48,7 +48,7 @@ describe APIMatchers::ResponseBody::HaveJsonNode do
       end
 
       it "pass when the expected key exists with the expected value (as Time)" do
-        now = Time.now
+        now = Time.now.to_s
         expect({ :time => now }.to_json).to have_json_node(:time).with(now)
       end
 
