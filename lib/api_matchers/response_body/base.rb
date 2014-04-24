@@ -31,13 +31,17 @@ module APIMatchers
         end
       end
 
-      def failure_message_for_should
+      def failure_message
         "expected to have node called: '#{@expected_node}'" << added_message << ". Got: '#{response_body}'"
       end
 
-      def failure_message_for_should_not
+      def failure_message_when_negated
         "expected to NOT have node called: '#{@expected_node}'" << added_message << ". Got: '#{response_body}'"
       end
+
+      # RSpec 2 compatibility:
+      alias_method :failure_message_for_should, :failure_message
+      alias_method :failure_message_for_should_not, :failure_message_when_negated
 
       def added_message
         if @with_value

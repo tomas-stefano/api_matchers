@@ -14,14 +14,17 @@ module APIMatchers
         @expected_json == json
       end
 
-      def failure_message_for_should
+      def failure_message
         "expect to have json: '#{response_body}'. Got: '#{json}'."
       end
 
-      def failure_message_for_should_not
+      def failure_message_when_negated
         "expect to NOT have json: '#{response_body}'."
       end
+
+      # RSpec 2 compatibility:
+      alias_method :failure_message_for_should, :failure_message
+      alias_method :failure_message_for_should_not, :failure_message_when_negated
     end
   end
 end
-
