@@ -16,9 +16,7 @@ module APIMatchers
       def content_type_response
         if @setup.header_method.present? and @setup.header_content_type_key.present?
           headers = @actual.send(@setup.header_method)
-          if headers.present?
-            headers[@setup.header_content_type_key] || headers
-          end
+          headers[@setup.header_content_type_key] || headers if headers.present?
         else
           @actual
         end
