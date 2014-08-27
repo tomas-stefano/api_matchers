@@ -13,10 +13,10 @@ describe APIMatchers::ResponseBody::HaveJson do
     end
 
     context 'when fails' do
-      it 'different json' do
+      it 'fails with the expected response nd the actual body in the fail message' do
         expect {
           expect(['Petshop', 'Cats'].to_json).to have_json(['Petshop', 'Dogs'])
-        }.to fail_with(%Q{expect to have json: '["Petshop","Cats"]'. Got: '["Petshop", "Cats"]'.})
+        }.to fail_with(%Q{expect to have json: '["Petshop", "Dogs"]'. Got: '["Petshop", "Cats"]'.})
       end
     end
   end
@@ -29,7 +29,7 @@ describe APIMatchers::ResponseBody::HaveJson do
     end
 
     context 'when fails' do
-      it 'equal json' do
+      it 'equal json returns the fail message for expect not to' do
         expect {
           expect(['Petshop', 'Cats'].to_json).not_to have_json(['Petshop', 'Cats'])
         }.to fail_with(%Q{expect to NOT have json: '["Petshop","Cats"]'.})
