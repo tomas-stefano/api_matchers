@@ -15,7 +15,7 @@ module APIMatchers
       end
 
       def failure_message
-        "expect to have json: '#{response_body}'. Got: '#{json}'."
+        "expect to have json: '#{expected_json}'. Got: '#{json}'."
       end
 
       def failure_message_when_negated
