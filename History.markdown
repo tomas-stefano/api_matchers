@@ -1,4 +1,8 @@
-## development
+## 0.5.1
+
+* Fix #have_json matcher fail message. Fix issue #20
+
+## 0.5.0
 
 * Internals - Migrate to the RSpec expect syntax.
 
