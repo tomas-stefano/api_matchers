@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::BeOk do
+RSpec.describe APIMatchers::HTTPStatusCode::BeOk do
   describe "should be_ok" do
     it "should passes if the actual is equal to 200" do
       expect(200).to be_ok

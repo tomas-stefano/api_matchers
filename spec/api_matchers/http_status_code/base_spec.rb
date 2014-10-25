@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::Base do
+RSpec.describe APIMatchers::HTTPStatusCode::Base do
   let(:setup) { OpenStruct.new }
   subject { APIMatchers::HTTPStatusCode::Base.new(setup) }
 

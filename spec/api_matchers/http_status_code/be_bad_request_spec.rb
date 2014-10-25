@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::BeBadRequest do
+RSpec.describe APIMatchers::HTTPStatusCode::BeBadRequest do
   describe "should be_bad_request" do
     it "should passes if the actual is equal to 400" do
       expect(400).to be_bad_request

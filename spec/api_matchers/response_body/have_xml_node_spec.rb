@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::ResponseBody::HaveXmlNode do
+RSpec.describe APIMatchers::ResponseBody::HaveXmlNode do
   describe "actual).to have_xml_node" do
     context 'expected key and value in top level' do
       it "should pass when the expected key exist" do

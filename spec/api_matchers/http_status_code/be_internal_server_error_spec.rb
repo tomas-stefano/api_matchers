@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::BeInternalServerError do
+RSpec.describe APIMatchers::HTTPStatusCode::BeInternalServerError do
   describe "should be_internal_server_error" do
     it "should passes if the actual is equal to 500" do
       expect(500).to be_internal_server_error

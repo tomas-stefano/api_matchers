@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::ResponseBody::HaveJsonNode do
+RSpec.describe APIMatchers::ResponseBody::HaveJsonNode do
   describe "actual).to have_json_node" do
     context 'expected key and value in top level' do
       it "pass when the expected key exist" do

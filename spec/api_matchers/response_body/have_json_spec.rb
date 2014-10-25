@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::ResponseBody::HaveJson do
+RSpec.describe APIMatchers::ResponseBody::HaveJson do
   describe "actual).to have_json" do
     context 'when pass' do
       it 'equal json' do

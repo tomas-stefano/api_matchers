@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::BeUnauthorized do
+RSpec.describe APIMatchers::HTTPStatusCode::BeUnauthorized do
   describe "should be_unauthorized" do
     it "should passes if the actual is equal to 401" do
       expect(401).to be_unauthorized

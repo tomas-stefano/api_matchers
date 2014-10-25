@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::Headers::Base do
+RSpec.describe APIMatchers::Headers::Base do
   let(:setup) { OpenStruct.new }
   subject { APIMatchers::Headers::Base.new(setup) }
 

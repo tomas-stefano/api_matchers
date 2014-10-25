@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::BeUnprocessableEntity do
+RSpec.describe APIMatchers::HTTPStatusCode::BeUnprocessableEntity do
   describe "should be_unprocessable_entity" do
     it "should passes if the actual is equal to 422" do
       expect(422).to be_unprocessable_entity

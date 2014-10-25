@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::ResponseBody::Base do
+RSpec.describe APIMatchers::ResponseBody::Base do
   let(:setup) { OpenStruct.new(:response_body_method => :body) }
   subject { APIMatchers::ResponseBody::Base.new(setup: setup, expected_node: :status) }
 

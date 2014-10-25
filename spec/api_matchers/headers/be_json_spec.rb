@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::Headers::BeJSON do
+RSpec.describe APIMatchers::Headers::BeJSON do
   describe "actual.to be_json" do
     it "should pass when the actual is json response" do
       expect("application/json; charset=utf-8").to be_json

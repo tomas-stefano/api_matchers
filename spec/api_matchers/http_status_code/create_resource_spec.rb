@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::CreateResource do
+RSpec.describe APIMatchers::HTTPStatusCode::CreateResource do
   describe "should create_resource" do
     it "should passes if the actual is equal to 201" do
       expect(201).to create_resource

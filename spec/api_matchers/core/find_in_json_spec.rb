@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module APIMatchers::Core
-  describe FindInJSON do
+  RSpec.describe FindInJSON do
     describe "#find" do
       context 'when node exists' do
         it "should return the value of the expected key" do

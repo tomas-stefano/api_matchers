@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::ResponseBody::HaveNode do
+RSpec.describe APIMatchers::ResponseBody::HaveNode do
   describe "in json" do
     before do
       APIMatchers.setup { |config| config.have_node_matcher = :json }

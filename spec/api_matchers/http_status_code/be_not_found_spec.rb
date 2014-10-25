@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe APIMatchers::HTTPStatusCode::BeBadRequest do
+RSpec.describe APIMatchers::HTTPStatusCode::BeBadRequest do
   describe "should be_not_found" do
     it "should passes if the actual is equal to 404" do
       expect(404).to be_not_found
