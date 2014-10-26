@@ -56,33 +56,33 @@ The have_node matcher parse the actual and see if have the expcted node with the
 You can verify if node exists:
 
 ```ruby
-'{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:transaction)
+expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_node(:transaction)
 ```
 
 Or if node exist with a value:
 
 ```ruby
-'{ "transaction": { "id": 54, "status": "paid" } }'.should have_node(:id).with(54)
+expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_node(:id).with(54)
 ```
 
 ```ruby
-'{ "error": "not_authorized" }'.should have_node(:error).with('not_authorized')
+expect('{ "error": "not_authorized" }').to have_node(:error).with('not_authorized')
 ```
 
 ```ruby
-'{"parcels":1 }'.should have_node(:parcels).with(1)
+expect('{"parcels":1 }').to have_node(:parcels).with(1)
 ```
 
 To see the json node and see if include a text, you can do this:
 
 ```ruby
-'{"error": "Transaction error: Name cant be blank"}'.should have_node(:error).including_text("Transaction error")
+expect('{"error": "Transaction error: Name cant be blank"}').to have_node(:error).including_text("Transaction error")
 ```
 
 You can verify boolean values too:
 
 ```ruby
-'{"creditcard":true}'.should have_node(:creditcard).with(true)
+expect('{"creditcard":true}').to have_node(:creditcard).with(true)
 ```
 
 ### HAVE NODE Matcher Configuration
@@ -96,25 +96,25 @@ end
 ```
 
 ```ruby
-'<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status)
+expect('<transaction><id>200</id><status>paid</status></transaction>').to have_node(:status)
 ```
 
 Using the `with` method:
 
 ```ruby
-'<transaction><id>200</id><status>paid</status></transaction>'.should have_node(:status).with('paid')
+expect('<transaction><id>200</id><status>paid</status></transaction>').to have_node(:status).with('paid')
 ```
 
 Or you can use the `have_xml_node` matcher:
 
 ```ruby
-"<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).with("Transaction error: Name can't be blank")
+expect("<error>Transaction error: Name can't be blank</error>").to have_xml_node(:error).with("Transaction error: Name can't be blank")
 ```
 
 To see the xml node and see if include a text, you can do this:
 
 ```ruby
-"<error>Transaction error: Name can't be blank</error>".should have_xml_node(:error).including_text("Transaction error")
+expect("<error>Transaction error: Name can't be blank</error>").to have_xml_node(:error).including_text("Transaction error")
 ```
 
 **If you work with xml and json in the same API, check the have_json_node and have_xml_node matchers.**
@@ -126,25 +126,25 @@ APIMatchers.setup do |config|
   config.response_body_method = :body
 end
 
-response.should have_node(:foo).with('bar')
+expect(response).to have_node(:foo).with('bar')
 ```
 
 Instead of:
 
 ```ruby
-response.body.should have_node(:foo)
+expect(response.body).to have_node(:foo)
 ```
 
 ### Have JSON Node Matcher
 
 ```ruby
-'{ "transaction": { "id": 54, "status": "paid" } }'.should have_json_node(:id).with(54)
+expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_json_node(:id).with(54)
 ```
 
 ### Have XML Node Matcher
 
 ```ruby
-"<product><name>gateway</name></product>".should have_xml_node(:name).with('gateway')
+expect("<product><name>gateway</name></product>").to have_xml_node(:name).with('gateway')
 ```
 
 ### Have JSON Matcher
@@ -152,7 +152,7 @@ response.body.should have_node(:foo)
 Sometimes, you want to compare the entire JSON structure:
 
 ```ruby
-"['Foo', 'Bar', 'Baz']".should have_json(['Foo', 'Bar', 'Baz'])
+expect("['Foo', 'Bar', 'Baz']").to have_json(['Foo', 'Bar', 'Baz'])
 ```
 
 ### Create Resource Matcher
@@ -160,7 +160,7 @@ Sometimes, you want to compare the entire JSON structure:
 This matchers see the HTTP STATUS CODE is equal to 201.
 
 ```ruby
-response.status.should create_resource
+expect(response.status).to create_resource
 ```
 
 ### BAD REQUEST Matcher
@@ -168,8 +168,8 @@ response.status.should create_resource
 This BAD REQUEST is a matcher that see if the HTTP STATUS code is equal to 400.
 
 ```ruby
-response.status.should be_a_bad_request
-response.status.should be_bad_request
+expect(response.status).to be_a_bad_request
+expect(response.status).to be_bad_request
 ```
 
 ### UNAUTHORIZED Matcher
@@ -177,8 +177,8 @@ response.status.should be_bad_request
 This UNAUTHORIZED is a matcher that see if the HTTP STATUS code is equal to 401.
 
 ```ruby
-response.status.should be_unauthorized
-response.body.should have_node(:message).with('Invalid Credentials')
+expect(response.status).to be_unauthorized
+expect(response.body).to have_node(:message).with('Invalid Credentials')
 ```
 
 ### INTERNAL SERVER ERROR Matcher
@@ -186,8 +186,8 @@ response.body.should have_node(:message).with('Invalid Credentials')
 This INTERNAL SERVER Error is a matcher that see if the HTTP STATUS code is equal to 500.
 
 ```ruby
-response.status.should be_internal_server_error
-response.body.should have_node(:message).with('An Internal Error Occurs in our precious app. :S')
+expect(response.status).to be_internal_server_error
+expect(response.body).to have_node(:message).with('An Internal Error Occurs in our precious app. :S')
 ```
 
 ### HTTP STATUS CODE Configuration
@@ -203,7 +203,7 @@ end
 Then you can use without call the **#status** method:
 
 ```ruby
-response.should create_resource
+expect(response).to create_resource
 ```
 
 This configurations affects this matchers:
@@ -220,7 +220,7 @@ This configurations affects this matchers:
 This is a matcher that see if the content type is xml:
 
 ```ruby
-response.headers['Content-Type'].should be_in_xml
+expect(response.headers['Content-Type']).to be_in_xml
 ```
 
 ### Be in JSON Matcher
@@ -228,7 +228,7 @@ response.headers['Content-Type'].should be_in_xml
 This is a matcher that see if the content type is in JSON:
 
 ```ruby
-response.headers['Content-Type'].should be_in_json
+expect(response.headers['Content-Type']).to be_in_json
 ```
 
 ### Headers Configuration
@@ -245,8 +245,8 @@ end
 And then you will be able to use without call the **#headers** calling the **#['Content-Type']** method:
 
 ```ruby
-response.should be_in_json
-response.should be_in_xml
+expect(response).to be_in_json
+expect(response).to be_in_xml
 ```
 
 ### Acknowlegments
