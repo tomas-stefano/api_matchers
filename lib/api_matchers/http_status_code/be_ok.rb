@@ -14,7 +14,7 @@ module APIMatchers
       end
 
       def description
-        "be ok"
+        "be ok with the status '200'"
       end
 
       # RSpec 2 compatibility:

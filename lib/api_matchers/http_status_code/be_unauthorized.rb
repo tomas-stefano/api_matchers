@@ -13,6 +13,10 @@ module APIMatchers
         %Q{expected that '#{@http_status_code}' to NOT be Unauthorized.}
       end
 
+      def description
+        "be Unauthorized with the status '401'"
+      end
+
       # RSpec 2 compatibility:
       alias_method :failure_message_for_should, :failure_message
       alias_method :failure_message_for_should_not, :failure_message_when_negated
