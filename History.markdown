@@ -1,3 +1,8 @@
+## 0.6.1
+
+* Add description to matchers. This makes RSpec not complain about missing
+    description.
+
 ## 0.6.0
 
 * Add be_forbidden matcher:
