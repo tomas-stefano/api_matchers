@@ -14,7 +14,7 @@ RSpec.describe APIMatchers::HTTPStatusCode::BeBadRequest do
   end
 
   describe "should_not be_not_found" do
-    it "should passes if the actual is not equal to 404" do
+    it "should pass if the actual is not equal to 404" do
       expect(401).not_to be_not_found
     end
 

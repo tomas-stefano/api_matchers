@@ -18,6 +18,10 @@ module APIMatchers
       ::APIMatchers::HTTPStatusCode::BeUnauthorized.new(::APIMatchers::Core::Setup)
     end
 
+    def be_forbidden
+      ::APIMatchers::HTTPStatusCode::BeForbidden.new(::APIMatchers::Core::Setup)
+    end
+
     def be_ok
       ::APIMatchers::HTTPStatusCode::BeOk.new(::APIMatchers::Core::Setup)
     end

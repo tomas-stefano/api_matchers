@@ -15,6 +15,7 @@ Collection of RSpec matchers for your API.
 * `create_resource`
 * `be_a_bad_request`
 * `be_unauthorized`
+* `be_forbidden`
 * `be_internal_server_error`
 * `be_not_found`
 
@@ -181,6 +182,14 @@ expect(response.status).to be_unauthorized
 expect(response.body).to have_node(:message).with('Invalid Credentials')
 ```
 
+### FORBIDDEN Matcher
+
+This is a matcher to see if the HTTP STATUS code is equal to 403.
+
+```ruby
+expect(response.status).to be_forbidden
+```
+
 ### INTERNAL SERVER ERROR Matcher
 
 This INTERNAL SERVER Error is a matcher that see if the HTTP STATUS code is equal to 500.
@@ -213,6 +222,7 @@ This configurations affects this matchers:
 * `be_a_bad_request`
 * `be_internal_server_error`
 * `be_unauthorized`
+* `be_forbidden`
 * `be_not_found`
 
 ### Be in XML Matcher

@@ -14,11 +14,11 @@ RSpec.describe APIMatchers::HTTPStatusCode::BeUnauthorized do
   end
 
   describe "should_not be_unauthorized" do
-    it "should passes if the actual is not equal to 401" do
+    it "should pass if the actual is not equal to 401" do
       expect(201).not_to be_unauthorized
     end
 
-    it "should fail if the actual is equal equal to 401" do
+    it "should fail if the actual is equal to 401" do
       expect {
         expect(401).not_to be_unauthorized
       }.to fail_with(%Q{expected that '401' to NOT be Unauthorized.})
