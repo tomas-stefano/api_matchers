@@ -1,3 +1,4 @@
+require 'active_support'
 require 'api_matchers'
 require 'ostruct'
 
