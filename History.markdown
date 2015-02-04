@@ -1,3 +1,13 @@
+## 0.6.0
+
+* Add be_forbidden matcher:
+
+```ruby
+  expect(response.status).to be_forbidden
+```
+
+* Add RSpec 3 and RSpec 2 compatibility.
+
 ## 0.5.1
 
 * Fix #have_json matcher fail message. Fix issue #20
