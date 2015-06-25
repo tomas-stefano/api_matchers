@@ -1,3 +1,7 @@
+## 0.6.2
+
+* Added RSpec 3.2.x and 3.3.x compatibility (Lucas Caton)
+
 ## 0.6.1
 
 * Add description to matchers. This makes RSpec not complain about missing
