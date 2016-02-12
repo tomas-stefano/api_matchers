@@ -6,7 +6,7 @@ module APIMatchers
       end
 
       def failure_message
-        %Q{expected that '#{@http_status_code}' to be Not Acceptable with the status '#{@http_status_code}'.}
+        %Q{expected that '#{@http_status_code}' to be Not Acceptable with the status '#{expected_status_code}'.}
       end
 
       def failure_message_when_negated
@@ -14,7 +14,7 @@ module APIMatchers
       end
 
       def description
-        "be Not Acceptable with the status '406'"
+        "be Not Acceptable with the status '#{expected_status_code}'"
       end
 
       # RSpec 2 compatibility:
