@@ -30,6 +30,10 @@ module APIMatchers
       ::APIMatchers::HTTPStatusCode::BeUnprocessableEntity.new(::APIMatchers::Core::Setup)
     end
 
+    def be_not_acceptable
+      ::APIMatchers::HTTPStatusCode::BeNotAcceptable.new(::APIMatchers::Core::Setup)
+    end
+
     def create_resource
       ::APIMatchers::HTTPStatusCode::CreateResource.new(::APIMatchers::Core::Setup)
     end

@@ -18,6 +18,7 @@ Collection of RSpec matchers for your API.
 * `be_forbidden`
 * `be_internal_server_error`
 * `be_not_found`
+* `be_not_acceptable`
 
 ## Other Matchers
 
@@ -224,6 +225,7 @@ This configurations affects this matchers:
 * `be_unauthorized`
 * `be_forbidden`
 * `be_not_found`
+* `be_not_acceptable`
 
 ### Be in XML Matcher
 

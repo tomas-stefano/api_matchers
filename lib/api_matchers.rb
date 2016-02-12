@@ -15,6 +15,7 @@ module APIMatchers
     autoload :BeUnauthorized, 'api_matchers/http_status_code/be_unauthorized'
     autoload :BeOk, 'api_matchers/http_status_code/be_ok'
     autoload :BeUnprocessableEntity, 'api_matchers/http_status_code/be_unprocessable_entity'
+    autoload :BeNotAcceptable, 'api_matchers/http_status_code/be_not_acceptable'
     autoload :BeForbidden, 'api_matchers/http_status_code/be_forbidden'
     autoload :CreateResource, 'api_matchers/http_status_code/create_resource'
   end
