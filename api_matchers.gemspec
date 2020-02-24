@@ -17,5 +17,5 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'rspec', '>= 3.1'
   gem.add_dependency 'activesupport', '>= 3.2.5'
-  gem.add_dependency 'nokogiri', '~> 1.6.6.4'
+  gem.add_dependency 'nokogiri', '>= 1.6.6.4', '< 1.10.9.0'
 end
