@@ -109,13 +109,17 @@ expect('<transaction><id>200</id><status>paid</status></transaction>').to have_n
 Or you can use the `have_xml_node` matcher:
 
 ```ruby
-expect("<error>Transaction error: Name can't be blank</error>").to have_xml_node(:error).with("Transaction error: Name can't be blank")
+expect(
+  "<error>Transaction error: Name can't be blank</error>"
+).to have_xml_node(:error).with("Transaction error: Name can't be blank")
 ```
 
 To see the xml node and see if include a text, you can do this:
 
 ```ruby
-expect("<error>Transaction error: Name can't be blank</error>").to have_xml_node(:error).including_text("Transaction error")
+expect(
+  "<error>Transaction error: Name can't be blank</error>"
+).to have_xml_node(:error).including_text("Transaction error")
 ```
 
 **If you work with xml and json in the same API, check the have_json_node and have_xml_node matchers.**
@@ -139,7 +143,9 @@ expect(response.body).to have_node(:foo)
 ### Have JSON Node Matcher
 
 ```ruby
-expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_json_node(:id).with(54)
+expect(
+  '{ "transaction": { "id": 54, "status": "paid" } }'
+).to have_json_node(:id).with(54)
 ```
 
 ### Have XML Node Matcher
@@ -196,7 +202,9 @@ This INTERNAL SERVER Error is a matcher that see if the HTTP STATUS code is equa
 
 ```ruby
 expect(response.status).to be_internal_server_error
-expect(response.body).to have_node(:message).with('An Internal Error Occurs in our precious app. :S')
+expect(
+  response.body
+).to have_node(:message).with('An Internal Error Occurs in our precious app. :S')
 ```
 
 ### HTTP STATUS CODE Configuration
