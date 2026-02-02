@@ -1,49 +1,76 @@
 PATH
   remote: .
   specs:
-    api_matchers (0.6.2)
-      activesupport (>= 3.2.5)
-      nokogiri (~> 1.6.6.4)
-      rspec (>= 3.1)
+    api_matchers (1.0.0)
+      activesupport (>= 7.0, < 9.0)
+      nokogiri (>= 1.15)
+      rspec (>= 3.12, < 4.0)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
-    activesupport (4.2.2)
-      i18n (~> 0.7)
-      json (~> 1.7, >= 1.7.7)
-      minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
-      tzinfo (~> 1.1)
-    diff-lcs (1.2.5)
-    i18n (0.7.0)
-    json (1.8.3)
-    mini_portile (0.6.2)
-    minitest (5.7.0)
-    nokogiri (1.6.6.4)
-      mini_portile (~> 0.6.0)
-    rspec (3.3.0)
-      rspec-core (~> 3.3.0)
-      rspec-expectations (~> 3.3.0)
-      rspec-mocks (~> 3.3.0)
-    rspec-core (3.3.0)
-      rspec-support (~> 3.3.0)
-    rspec-expectations (3.3.0)
+    activesupport (7.2.3)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.3.1)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
+      minitest (>= 5.1)
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0, >= 2.0.5)
+    base64 (0.3.0)
+    benchmark (0.5.0)
+    bigdecimal (4.0.1)
+    concurrent-ruby (1.3.6)
+    connection_pool (2.5.5)
+    diff-lcs (1.6.2)
+    drb (2.2.3)
+    hana (1.3.7)
+    i18n (1.14.8)
+      concurrent-ruby (~> 1.0)
+    json_schemer (2.5.0)
+      bigdecimal
+      hana (~> 1.3)
+      regexp_parser (~> 2.0)
+      simpleidn (~> 0.2)
+    logger (1.7.0)
+    minitest (5.27.0)
+    nokogiri (1.18.10-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.18.10-x86_64-darwin)
+      racc (~> 1.4)
+    racc (1.8.1)
+    rake (13.3.1)
+    regexp_parser (2.11.3)
+    rspec (3.13.2)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.3.0)
-    rspec-mocks (3.3.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.7)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.3.0)
-    rspec-support (3.3.0)
-    thread_safe (0.3.5)
-    tzinfo (1.2.2)
-      thread_safe (~> 0.1)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.7)
+    securerandom (0.4.1)
+    simpleidn (0.2.3)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
 
 PLATFORMS
-  ruby
+  arm64-darwin
+  x86_64-darwin
 
 DEPENDENCIES
   api_matchers!
+  json_schemer (~> 2.0)
+  rake (~> 13.0)
 
 BUNDLED WITH
-   1.10.6
+   2.6.9
