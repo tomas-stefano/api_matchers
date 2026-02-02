@@ -275,4 +275,61 @@ RSpec.describe APIMatchers::ResponseBody::HaveJsonNode do
       }.to fail_with(%Q{expected to have node called: 'bar'. Got: '{"baz":"foo"}'})
     end
   end
+
+  describe "including" do
+    it "passes when array includes an element matching the hash" do
+      json = '{"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}'
+      expect(json).to have_json_node(:users).including(name: "Alice")
+    end
+
+    it "passes when array includes an element matching multiple attributes" do
+      json = '{"users": [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]}'
+      expect(json).to have_json_node(:users).including(name: "Alice", age: 30)
+    end
+
+    it "fails when array does not include matching element" do
+      json = '{"users": [{"name": "Alice"}, {"name": "Bob"}]}'
+      expect {
+        expect(json).to have_json_node(:users).including(name: "Charlie")
+      }.to fail_with(/expected to have node called: 'users'/)
+    end
+
+    it "fails when node is not an array" do
+      json = '{"user": {"name": "Alice"}}'
+      expect {
+        expect(json).to have_json_node(:user).including(name: "Alice")
+      }.to fail_with(/expected to have node called: 'user'/)
+    end
+
+    it "passes when array includes a simple value" do
+      json = '{"tags": ["ruby", "rails", "api"]}'
+      expect(json).to have_json_node(:tags).including("ruby")
+    end
+  end
+
+  describe "including_all" do
+    it "passes when array includes all specified elements" do
+      json = '{"items": [{"id": 1}, {"id": 2}, {"id": 3}]}'
+      expect(json).to have_json_node(:items).including_all([{id: 1}, {id: 2}])
+    end
+
+    it "fails when array is missing some elements" do
+      json = '{"items": [{"id": 1}, {"id": 3}]}'
+      expect {
+        expect(json).to have_json_node(:items).including_all([{id: 1}, {id: 2}])
+      }.to fail_with(/expected to have node called: 'items'/)
+    end
+
+    it "passes when array includes all simple values" do
+      json = '{"numbers": [1, 2, 3, 4, 5]}'
+      expect(json).to have_json_node(:numbers).including_all([1, 3, 5])
+    end
+
+    it "fails when node is not an array" do
+      json = '{"item": {"id": 1}}'
+      expect {
+        expect(json).to have_json_node(:item).including_all([{id: 1}])
+      }.to fail_with(/expected to have node called: 'item'/)
+    end
+  end
 end
