@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module Core
     class FindInJSON
@@ -7,41 +9,68 @@ module APIMatchers
         @json = json
       end
 
-      def find(options={})
+      def find(options = {})
         expected_key = options.fetch(:node).to_s
-        expected_value = options[:value]
+        expected_value = ValueNormalizer.normalize(options[:value])
 
-        @json.each do |key, value|
-          if key == expected_key
-            unless expected_value.nil?
-              if expected_value.is_a? DateTime or expected_value.is_a? Date
-                expected_value = expected_value.to_s
-              elsif expected_value.is_a? Time
-                expected_value = expected_value.to_datetime.to_s
-              end
-            end
-            return value if value == expected_value or expected_value.nil?
-          end
+        result = search(json, expected_key, expected_value)
+        return result[:value] if result[:found]
 
-          # do we have more to recurse through?
-          keep_going = nil
-          if value.is_a? Hash or value.is_a? Array
-            keep_going = value                  # hash or array, keep going
-          elsif value.nil? and key.is_a? Hash
-            keep_going = key                    # the array was passed in and now in the key, keep going
-          end
+        raise ::APIMatchers::Core::Exceptions::KeyNotFound, "key '#{expected_key}' was not found"
+      end
 
-          if keep_going
-            begin
-              # ignore nodes where the key doesn't match
-              return FindInJSON.new(keep_going).find(node: expected_key, value: expected_value)
-            rescue ::APIMatchers::Core::Exceptions::KeyNotFound
-            end
-          end
+      def available_keys
+        collect_keys(json)
+      end
 
+      private
+
+      def search(data, expected_key, expected_value)
+        case data
+        when Hash
+          search_in_hash(data, expected_key, expected_value)
+        when Array
+          search_in_array(data, expected_key, expected_value)
+        else
+          { found: false }
         end
-         # we did not find the requested key
-        raise ::APIMatchers::Core::Exceptions::KeyNotFound.new("key was not found")
+      end
+
+      def search_in_hash(hash, expected_key, expected_value)
+        hash.each do |key, value|
+          if key.to_s == expected_key
+            if expected_value.nil? || value == expected_value
+              return { found: true, value: value }
+            end
+          end
+
+          result = search(value, expected_key, expected_value)
+          return result if result[:found]
+        end
+
+        { found: false }
+      end
+
+      def search_in_array(array, expected_key, expected_value)
+        array.each do |element|
+          result = search(element, expected_key, expected_value)
+          return result if result[:found]
+        end
+
+        { found: false }
+      end
+
+      def collect_keys(data, keys = [])
+        case data
+        when Hash
+          data.each do |key, value|
+            keys << key.to_s
+            collect_keys(value, keys)
+          end
+        when Array
+          data.each { |element| collect_keys(element, keys) }
+        end
+        keys.uniq
       end
     end
   end
