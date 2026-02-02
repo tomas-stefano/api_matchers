@@ -1,6 +1,11 @@
-# API Matchers [![Build Status](https://travis-ci.org/tomas-stefano/api_matchers.png?branch=master)](https://travis-ci.org/tomas-stefano/api_matchers)
+# API Matchers [![CI](https://github.com/tomas-stefano/api_matchers/actions/workflows/ci.yml/badge.svg)](https://github.com/tomas-stefano/api_matchers/actions/workflows/ci.yml)
 
 Collection of RSpec matchers for your API.
+
+## Requirements
+
+- Ruby 3.1+
+- RSpec 3.12+
 
 ## Response Body Matchers
 
@@ -8,30 +13,22 @@ Collection of RSpec matchers for your API.
 * `have_json_node`
 * `have_xml_node`
 * `have_json`
+* `match_json_schema` (requires `json_schemer` gem)
 
-## Response Status Matchers
-
-* `be_ok`
-* `create_resource`
-* `be_a_bad_request`
-* `be_unauthorized`
-* `be_forbidden`
-* `be_internal_server_error`
-* `be_not_found`
-
-## Other Matchers
+## Content Type Matchers
 
 * `be_in_xml`
 * `be_in_json`
 
 ## Install
 
-Include the gem to your test group in you Gemfile:
+Include the gem to your test group in your Gemfile:
 
 ```ruby
 group :test do
   gem 'api_matchers'
-  # other gems
+  # For JSON schema validation (optional)
+  gem 'json_schemer'
 end
 ```
 
@@ -41,7 +38,7 @@ Or install it manually: `gem install api_matchers`.
 
 ### Including in RSpec
 
-To include all this matchers you need to include the APIMatchers::RSpecMatchers module:
+To include all matchers you need to include the APIMatchers::RSpecMatchers module:
 
 ```ruby
 RSpec.configure do |config|
@@ -51,16 +48,16 @@ end
 
 ### Have Node Matcher
 
-The have_node matcher parse the actual and see if have the expcted node with the expected value.
-**The default that have_node will parse is JSON.**
+The have_node matcher parses the actual value and checks if it has the expected node with the expected value.
+**The default format that have_node will parse is JSON.**
 
-You can verify if node exists:
+You can verify if a node exists:
 
 ```ruby
 expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_node(:transaction)
 ```
 
-Or if node exist with a value:
+Or if a node exists with a specific value:
 
 ```ruby
 expect('{ "transaction": { "id": 54, "status": "paid" } }').to have_node(:id).with(54)
@@ -74,7 +71,7 @@ expect('{ "error": "not_authorized" }').to have_node(:error).with('not_authorize
 expect('{"parcels":1 }').to have_node(:parcels).with(1)
 ```
 
-To see the json node and see if include a text, you can do this:
+To check if a json node includes specific text:
 
 ```ruby
 expect('{"error": "Transaction error: Name cant be blank"}').to have_node(:error).including_text("Transaction error")
@@ -86,13 +83,13 @@ You can verify boolean values too:
 expect('{"creditcard":true}').to have_node(:creditcard).with(true)
 ```
 
-### HAVE NODE Matcher Configuration
+### Have Node Matcher Configuration
 
-You can configure if you want xml (JSON is the default):
+You can configure if you want XML (JSON is the default):
 
 ```ruby
 APIMatchers.setup do |config|
-  config.content_type = :xml
+  config.have_node_matcher = :xml
 end
 ```
 
@@ -114,7 +111,7 @@ expect(
 ).to have_xml_node(:error).with("Transaction error: Name can't be blank")
 ```
 
-To see the xml node and see if include a text, you can do this:
+To see the xml node and see if it includes specific text:
 
 ```ruby
 expect(
@@ -124,7 +121,7 @@ expect(
 
 **If you work with xml and json in the same API, check the have_json_node and have_xml_node matchers.**
 
-You can configure the name of the method and then you will be able to use *without* the **#body** method, for example:
+You can configure the name of the method so you can use it *without* the **#body** method:
 
 ```ruby
 APIMatchers.setup do |config|
@@ -148,6 +145,18 @@ expect(
 ).to have_json_node(:id).with(54)
 ```
 
+#### Array Inclusion
+
+Check if an array contains elements matching specific criteria:
+
+```ruby
+# Check if array includes an element with matching attributes
+expect('{"users": [{"name": "Alice"}, {"name": "Bob"}]}').to have_json_node(:users).including(name: "Alice")
+
+# Check if array includes all specified elements
+expect('{"items": [{"id": 1}, {"id": 2}, {"id": 3}]}').to have_json_node(:items).including_all([{id: 1}, {id: 2}])
+```
+
 ### Have XML Node Matcher
 
 ```ruby
@@ -162,80 +171,27 @@ Sometimes, you want to compare the entire JSON structure:
 expect("['Foo', 'Bar', 'Baz']").to have_json(['Foo', 'Bar', 'Baz'])
 ```
 
-### Create Resource Matcher
+### Match JSON Schema Matcher
 
-This matchers see the HTTP STATUS CODE is equal to 201.
-
-```ruby
-expect(response.status).to create_resource
-```
-
-### BAD REQUEST Matcher
-
-This BAD REQUEST is a matcher that see if the HTTP STATUS code is equal to 400.
+Validate JSON against a JSON Schema (requires `json_schemer` gem):
 
 ```ruby
-expect(response.status).to be_a_bad_request
-expect(response.status).to be_bad_request
+schema = {
+  type: "object",
+  required: ["id", "name"],
+  properties: {
+    id: { type: "integer" },
+    name: { type: "string" },
+    email: { type: "string", format: "email" }
+  }
+}
+
+expect('{"id": 1, "name": "John", "email": "john@example.com"}').to match_json_schema(schema)
 ```
-
-### UNAUTHORIZED Matcher
-
-This UNAUTHORIZED is a matcher that see if the HTTP STATUS code is equal to 401.
-
-```ruby
-expect(response.status).to be_unauthorized
-expect(response.body).to have_node(:message).with('Invalid Credentials')
-```
-
-### FORBIDDEN Matcher
-
-This is a matcher to see if the HTTP STATUS code is equal to 403.
-
-```ruby
-expect(response.status).to be_forbidden
-```
-
-### INTERNAL SERVER ERROR Matcher
-
-This INTERNAL SERVER Error is a matcher that see if the HTTP STATUS code is equal to 500.
-
-```ruby
-expect(response.status).to be_internal_server_error
-expect(
-  response.body
-).to have_node(:message).with('An Internal Error Occurs in our precious app. :S')
-```
-
-### HTTP STATUS CODE Configuration
-
-You can configure the name method to call the http status code:
-
-```ruby
-APIMatchers.setup do |config|
-  config.http_status_method = :status
-end
-```
-
-Then you can use without call the **#status** method:
-
-```ruby
-expect(response).to create_resource
-```
-
-This configurations affects this matchers:
-
-* `be_ok`
-* `create_resource`
-* `be_a_bad_request`
-* `be_internal_server_error`
-* `be_unauthorized`
-* `be_forbidden`
-* `be_not_found`
 
 ### Be in XML Matcher
 
-This is a matcher that see if the content type is xml:
+Check if the content type is XML:
 
 ```ruby
 expect(response.headers['Content-Type']).to be_in_xml
@@ -243,7 +199,7 @@ expect(response.headers['Content-Type']).to be_in_xml
 
 ### Be in JSON Matcher
 
-This is a matcher that see if the content type is in JSON:
+Check if the content type is JSON:
 
 ```ruby
 expect(response.headers['Content-Type']).to be_in_json
@@ -251,7 +207,7 @@ expect(response.headers['Content-Type']).to be_in_json
 
 ### Headers Configuration
 
-You can configure the name method to call the headers and content type:
+You can configure the header method and content type key:
 
 ```ruby
 APIMatchers.setup do |config|
@@ -260,18 +216,52 @@ APIMatchers.setup do |config|
 end
 ```
 
-And then you will be able to use without call the **#headers** calling the **#['Content-Type']** method:
+And then you can use without calling the **#headers** method:
 
 ```ruby
 expect(response).to be_in_json
 expect(response).to be_in_xml
 ```
 
-### Acknowlegments
+## Upgrading from 0.x to 1.0
 
-* Special thanks to Daniel Konishi to contribute in the product that I extracted the matchers to this gem.
+### Breaking Changes
 
-### Contributors
+1. **Ruby 3.1+ required** - Ruby 1.9, 2.x, and early 3.x versions are no longer supported.
+
+2. **HTTP Status Matchers Removed** - The following matchers have been removed as they overlap with `rspec-rails`:
+   - `be_ok`
+   - `create_resource`
+   - `be_a_bad_request` / `be_bad_request`
+   - `be_unauthorized`
+   - `be_forbidden`
+   - `be_internal_server_error`
+   - `be_not_found`
+   - `be_unprocessable_entity`
+
+   **Migration**: Use `rspec-rails` matchers instead:
+   ```ruby
+   # Before
+   expect(response.status).to be_ok
+   expect(response.status).to create_resource
+
+   # After (with rspec-rails)
+   expect(response).to have_http_status(:ok)
+   expect(response).to have_http_status(:created)
+   ```
+
+3. **Configuration Changes** - `http_status_method` configuration option has been removed.
+
+### New Features
+
+- `including` and `including_all` methods for array matching in `have_json_node`
+- `match_json_schema` matcher for JSON Schema validation (requires `json_schemer` gem)
+
+## Acknowledgements
+
+* Special thanks to Daniel Konishi for contributing to the product from which I extracted the matchers for this gem.
+
+## Contributors
 
 * Stephen Orens
 * Lucas Caton

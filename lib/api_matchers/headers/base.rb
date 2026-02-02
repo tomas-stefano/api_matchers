@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module Headers
     class Base
@@ -14,9 +16,9 @@ module APIMatchers
       end
 
       def content_type_response
-        if @setup.header_method.present? and @setup.header_content_type_key.present?
+        if @setup.header_method.present? && @setup.header_content_type_key.present?
           headers = @actual.send(@setup.header_method)
-          headers[@setup.header_content_type_key] || headers if headers.present?
+          headers.present? ? (headers[@setup.header_content_type_key] || headers) : nil
         else
           @actual
         end

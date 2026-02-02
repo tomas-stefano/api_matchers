@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module ResponseBody
     class HaveJson
@@ -21,10 +23,6 @@ module APIMatchers
       def failure_message_when_negated
         "expect to NOT have json: '#{response_body}'."
       end
-
-      # RSpec 2 compatibility:
-      alias_method :failure_message_for_should, :failure_message
-      alias_method :failure_message_for_should_not, :failure_message_when_negated
     end
   end
 end

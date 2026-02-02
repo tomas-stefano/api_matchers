@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module ResponseBody
     class Base
       attr_reader :setup, :expected_node, :actual
       attr_writer :actual
 
-      def initialize(options={})
+      def initialize(options = {})
         @expected_node = options.fetch(:expected_node)
         @setup = options.fetch(:setup)
       end
@@ -38,10 +40,6 @@ module APIMatchers
       def failure_message_when_negated
         "expected to NOT have node called: '#{@expected_node}'" << added_message << ". Got: '#{response_body}'"
       end
-
-      # RSpec 2 compatibility:
-      alias_method :failure_message_for_should, :failure_message
-      alias_method :failure_message_for_should_not, :failure_message_when_negated
 
       def added_message
         if @with_value
