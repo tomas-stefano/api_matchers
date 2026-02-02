@@ -1,23 +1,11 @@
+# frozen_string_literal: true
+
 require "api_matchers/version"
 require "active_support/core_ext/object"
 require "active_support/core_ext/class"
 
 module APIMatchers
   autoload :RSpecMatchers, 'api_matchers/core/rspec_matchers'
-
-  # HTTP Status Code Matchers
-  #
-  module HTTPStatusCode
-    autoload :Base, 'api_matchers/http_status_code/base'
-    autoload :BeBadRequest, 'api_matchers/http_status_code/be_bad_request'
-    autoload :BeNotFound, 'api_matchers/http_status_code/be_not_found'
-    autoload :BeInternalServerError, 'api_matchers/http_status_code/be_internal_server_error'
-    autoload :BeUnauthorized, 'api_matchers/http_status_code/be_unauthorized'
-    autoload :BeOk, 'api_matchers/http_status_code/be_ok'
-    autoload :BeUnprocessableEntity, 'api_matchers/http_status_code/be_unprocessable_entity'
-    autoload :BeForbidden, 'api_matchers/http_status_code/be_forbidden'
-    autoload :CreateResource, 'api_matchers/http_status_code/create_resource'
-  end
 
   # Content Type Matchers
   #
@@ -35,12 +23,14 @@ module APIMatchers
     autoload :HaveJson, 'api_matchers/response_body/have_json'
     autoload :HaveXmlNode,  'api_matchers/response_body/have_xml_node'
     autoload :HaveNode, 'api_matchers/response_body/have_node'
+    autoload :MatchJsonSchema, 'api_matchers/response_body/match_json_schema'
   end
 
   # Core
   #
   module Core
     autoload :FindInJSON, 'api_matchers/core/find_in_json'
+    autoload :ValueNormalizer, 'api_matchers/core/value_normalizer'
     autoload :Parser, 'api_matchers/core/parser'
     autoload :Setup, 'api_matchers/core/setup'
     autoload :Exceptions, 'api_matchers/core/exceptions'

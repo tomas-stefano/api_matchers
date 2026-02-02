@@ -1,40 +1,7 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module RSpecMatchers
-    def be_bad_request
-      ::APIMatchers::HTTPStatusCode::BeBadRequest.new(::APIMatchers::Core::Setup)
-    end
-    alias :be_a_bad_request :be_bad_request
-
-    def be_not_found
-      ::APIMatchers::HTTPStatusCode::BeNotFound.new(::APIMatchers::Core::Setup)
-    end
-
-    def be_internal_server_error
-      ::APIMatchers::HTTPStatusCode::BeInternalServerError.new(::APIMatchers::Core::Setup)
-    end
-    alias :be_an_internal_server_error :be_internal_server_error
-
-    def be_unauthorized
-      ::APIMatchers::HTTPStatusCode::BeUnauthorized.new(::APIMatchers::Core::Setup)
-    end
-
-    def be_forbidden
-      ::APIMatchers::HTTPStatusCode::BeForbidden.new(::APIMatchers::Core::Setup)
-    end
-
-    def be_ok
-      ::APIMatchers::HTTPStatusCode::BeOk.new(::APIMatchers::Core::Setup)
-    end
-
-    def be_unprocessable_entity
-      ::APIMatchers::HTTPStatusCode::BeUnprocessableEntity.new(::APIMatchers::Core::Setup)
-    end
-
-    def create_resource
-      ::APIMatchers::HTTPStatusCode::CreateResource.new(::APIMatchers::Core::Setup)
-    end
-    alias :created_resource :create_resource
-
     def be_xml
       ::APIMatchers::Headers::BeXML.new(::APIMatchers::Core::Setup)
     end
@@ -64,6 +31,10 @@ module APIMatchers
       else
         have_xml_node(expected_node)
       end
+    end
+
+    def match_json_schema(schema)
+      ::APIMatchers::ResponseBody::MatchJsonSchema.new(schema: schema, setup: ::APIMatchers::Core::Setup)
     end
   end
 end

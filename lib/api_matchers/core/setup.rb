@@ -1,28 +1,8 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module Core
     class Setup
-      # The http status method that will be called when you call http status matchers
-      #
-      # ==== Examples
-      #
-      #  response.status.should create_resource
-      #  response.status.should be_bad_request
-      #  response.status.should be_unauthorized
-      #
-      #  # Instead calling #status everytime, you can configure:
-      #
-      #  APIMatchers.setup do |config|
-      #    config.http_status_method = :status
-      #  end
-      #
-      # Then:
-      #
-      #  response.should create_resource
-      #  response.should be_bad_request
-      #  response.should be_unauthorized
-      #
-      cattr_accessor :http_status_method
-
       # The response body method that will be called when you call the have_node matchers
       #
       # ==== Examples
@@ -34,7 +14,7 @@ module APIMatchers
       #  # Instead calling #body everytime, you can configure:
       #
       #  APIMatchers.setup do |config|
-      #    config.http_status_method = :body
+      #    config.response_body_method = :body
       #  end
       #
       # Then:
