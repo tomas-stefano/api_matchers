@@ -8,12 +8,43 @@ Collection of RSpec matchers for your API.
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Matchers](#matchers)
-  - [have_json_node](#have_json_node)
-  - [have_xml_node](#have_xml_node)
-  - [have_node](#have_node)
-  - [have_json](#have_json)
-  - [match_json_schema](#match_json_schema)
-  - [be_json / be_xml](#be_json--be_xml)
+  - [Response Body Matchers](#response-body-matchers)
+    - [have_json_node](#have_json_node)
+    - [have_xml_node](#have_xml_node)
+    - [have_node](#have_node)
+    - [have_json](#have_json)
+    - [match_json_schema](#match_json_schema)
+  - [HTTP Status Matchers](#http-status-matchers)
+    - [have_http_status](#have_http_status)
+    - [be_successful](#be_successful)
+    - [be_redirect](#be_redirect)
+    - [be_client_error / be_server_error](#be_client_error--be_server_error)
+    - [Specific Status Matchers](#specific-status-matchers)
+  - [JSON Structure Matchers](#json-structure-matchers)
+    - [have_json_keys](#have_json_keys)
+    - [have_json_type](#have_json_type)
+  - [Collection Matchers](#collection-matchers)
+    - [have_json_size](#have_json_size)
+    - [be_sorted_by](#be_sorted_by)
+  - [Header Matchers](#header-matchers)
+    - [be_json / be_xml](#be_json--be_xml)
+    - [have_header](#have_header)
+    - [have_cors_headers](#have_cors_headers)
+    - [have_cache_control](#have_cache_control)
+  - [Pagination Matchers](#pagination-matchers)
+    - [be_paginated](#be_paginated)
+    - [have_pagination_links](#have_pagination_links)
+    - [have_total_count](#have_total_count)
+  - [Error Response Matchers](#error-response-matchers)
+    - [have_error / have_errors](#have_error--have_errors)
+    - [have_error_on](#have_error_on)
+  - [JSON:API Matchers](#jsonapi-matchers)
+    - [be_json_api_compliant](#be_json_api_compliant)
+    - [have_json_api_data](#have_json_api_data)
+    - [have_json_api_attributes](#have_json_api_attributes)
+    - [have_json_api_relationships](#have_json_api_relationships)
+  - [HATEOAS Matchers](#hateoas-matchers)
+    - [have_link](#have_link)
 - [Configuration](#configuration)
 - [Upgrading from 0.x to 1.0](#upgrading-from-0x-to-10)
 - [Contributing](#contributing)
@@ -68,6 +99,8 @@ end
 ```
 
 ## Matchers
+
+### Response Body Matchers
 
 ### have_json_node
 
@@ -626,6 +659,161 @@ Errors:
 Response: {"id":1,"name":123}
 ```
 
+### HTTP Status Matchers
+
+### have_http_status
+
+Check for specific HTTP status codes using either numeric codes or symbolic names:
+
+```ruby
+# Using numeric codes
+expect(response).to have_http_status(200)
+expect(response).to have_http_status(201)
+expect(response).to have_http_status(404)
+
+# Using symbolic names (Rails-style)
+expect(response).to have_http_status(:ok)
+expect(response).to have_http_status(:created)
+expect(response).to have_http_status(:not_found)
+expect(response).to have_http_status(:unprocessable_entity)
+
+# Negation
+expect(response).not_to have_http_status(:ok)
+```
+
+### be_successful
+
+Check if the response status is in the 2xx range:
+
+```ruby
+expect(response).to be_successful  # 200-299
+expect(response).to be_success     # alias
+
+# Negation
+expect(response).not_to be_successful
+```
+
+### be_redirect
+
+Check if the response status is in the 3xx range:
+
+```ruby
+expect(response).to be_redirect    # 300-399
+expect(response).to be_redirection # alias
+```
+
+### be_client_error / be_server_error
+
+Check for client (4xx) or server (5xx) errors:
+
+```ruby
+expect(response).to be_client_error  # 400-499
+expect(response).to be_server_error  # 500-599
+```
+
+### Specific Status Matchers
+
+Convenience matchers for common status codes:
+
+```ruby
+expect(response).to be_not_found           # 404
+expect(response).to be_unauthorized        # 401
+expect(response).to be_forbidden           # 403
+expect(response).to be_unprocessable       # 422
+expect(response).to be_unprocessable_entity # alias for 422
+expect(response).to be_no_content          # 204
+```
+
+### JSON Structure Matchers
+
+### have_json_keys
+
+Verify that JSON contains specific keys at the root or at a given path:
+
+```ruby
+json = '{"id": 1, "name": "John", "email": "john@example.com"}'
+
+# Check for multiple keys
+expect(json).to have_json_keys(:id, :name, :email)
+expect(json).to have_json_keys(:id, :name)  # subset is OK
+
+# At a specific path
+json = '{"user": {"id": 1, "name": "John"}}'
+expect(json).to have_json_keys(:id, :name).at_path("user")
+
+# Negation
+expect(json).not_to have_json_keys(:password, :token)
+```
+
+### have_json_type
+
+Verify the type of a JSON value at a given path:
+
+```ruby
+json = '{"id": 1, "name": "John", "active": true, "tags": ["ruby"]}'
+
+expect(json).to have_json_type(Integer).at_path("id")
+expect(json).to have_json_type(String).at_path("name")
+expect(json).to have_json_type(:boolean).at_path("active")  # true or false
+expect(json).to have_json_type(Array).at_path("tags")
+expect(json).to have_json_type(Hash).at_path("user")
+expect(json).to have_json_type(NilClass).at_path("deleted_at")
+
+# Numeric types
+expect(json).to have_json_type(Numeric).at_path("price")  # Integer or Float
+
+# Nested paths
+json = '{"user": {"profile": {"age": 30}}}'
+expect(json).to have_json_type(Integer).at_path("user.profile.age")
+```
+
+### Collection Matchers
+
+### have_json_size
+
+Check the size of a JSON array or hash:
+
+```ruby
+json = '{"users": [{"id": 1}, {"id": 2}, {"id": 3}]}'
+
+expect(json).to have_json_size(3).at_path("users")
+
+# At root level
+expect('[1, 2, 3, 4, 5]').to have_json_size(5)
+
+# Hash size (number of keys)
+expect('{"a": 1, "b": 2}').to have_json_size(2)
+
+# Negation
+expect(json).not_to have_json_size(10).at_path("users")
+```
+
+### be_sorted_by
+
+Check if a JSON array is sorted by a specific field:
+
+```ruby
+json = '[{"id": 1}, {"id": 2}, {"id": 3}]'
+
+# Default ascending order
+expect(json).to be_sorted_by(:id)
+expect(json).to be_sorted_by(:id).ascending
+
+# Descending order
+json = '[{"id": 3}, {"id": 2}, {"id": 1}]'
+expect(json).to be_sorted_by(:id).descending
+
+# At a specific path
+json = '{"users": [{"name": "Alice"}, {"name": "Bob"}, {"name": "Charlie"}]}'
+expect(json).to be_sorted_by(:name).at_path("users")
+
+# With dates
+json = '[{"created_at": "2023-01-01"}, {"created_at": "2023-06-15"}]'
+expect(json).to be_sorted_by(:created_at)
+```
+
+### Header Matchers
+
 ### be_json / be_xml
 
 Check the Content-Type header:
@@ -653,29 +841,266 @@ expect(response).to be_json
 expect(response).to be_xml
 ```
 
-#### Practical Examples
+### have_header
+
+Check for the presence of HTTP headers with optional value matching:
 
 ```ruby
-RSpec.describe "API Content Types", type: :request do
-  it "returns JSON for user endpoint" do
-    get "/api/users/1"
+# Check header exists
+expect(response).to have_header('X-Request-Id')
+expect(response).to have_header('Content-Type')
 
-    expect(response.headers['Content-Type']).to be_json
-  end
+# Check header with specific value
+expect(response).to have_header('X-Request-Id').with_value('abc-123')
+expect(response).to have_header('Content-Type').with_value('application/json')
 
-  it "returns XML for legacy endpoint" do
-    get "/api/legacy/users/1"
+# Check header matching a pattern
+expect(response).to have_header('X-Request-Id').matching(/^[a-f0-9-]+$/)
+expect(response).to have_header('Location').matching(/\/users\/\d+/)
 
-    expect(response.headers['Content-Type']).to be_xml
-  end
+# Negation
+expect(response).not_to have_header('X-Internal-Only')
+```
 
-  it "returns JSON by default" do
-    get "/api/data"
+### have_cors_headers
 
-    expect(response.headers['Content-Type']).to be_json
-    expect(response.headers['Content-Type']).not_to be_xml
-  end
-end
+Check for CORS (Cross-Origin Resource Sharing) headers:
+
+```ruby
+# Basic check for Access-Control-Allow-Origin
+expect(response).to have_cors_headers
+
+# Check for specific origin
+expect(response).to have_cors_headers.for_origin('https://example.com')
+
+# Negation
+expect(response).not_to have_cors_headers
+```
+
+### have_cache_control
+
+Check Cache-Control header directives:
+
+```ruby
+# Single directive
+expect(response).to have_cache_control(:no_cache)
+expect(response).to have_cache_control(:private)
+
+# Multiple directives
+expect(response).to have_cache_control(:private, :no_store)
+expect(response).to have_cache_control(:public, 'max-age')
+
+# Underscores are converted to dashes
+expect(response).to have_cache_control(:must_revalidate)  # checks must-revalidate
+
+# Negation
+expect(response).not_to have_cache_control(:public)
+```
+
+### Pagination Matchers
+
+### be_paginated
+
+Check if a response contains pagination metadata:
+
+```ruby
+json = '{"data": [], "meta": {"page": 1, "per_page": 10, "total": 100}}'
+expect(json).to be_paginated
+
+# Also works with links-style pagination
+json = '{"data": [], "links": {"next": "/page/2", "prev": "/page/1"}}'
+expect(json).to be_paginated
+
+# Or root-level pagination keys
+json = '{"items": [], "page": 1, "total_count": 50}'
+expect(json).to be_paginated
+
+# Negation
+expect('{"data": []}').not_to be_paginated
+```
+
+### have_pagination_links
+
+Check for specific pagination links:
+
+```ruby
+json = '{"data": [], "links": {"next": "/page/2", "prev": "/page/1", "first": "/page/1", "last": "/page/10"}}'
+
+expect(json).to have_pagination_links(:next, :prev)
+expect(json).to have_pagination_links(:first, :last)
+expect(json).to have_pagination_links(:next)  # single link
+
+# Negation
+expect(json).not_to have_pagination_links(:next)
+```
+
+### have_total_count
+
+Check for total count in pagination metadata:
+
+```ruby
+json = '{"data": [], "meta": {"total": 100}}'
+expect(json).to have_total_count(100)
+
+# Works with various key names
+json = '{"items": [], "total_count": 50}'
+expect(json).to have_total_count(50)
+
+# Negation
+expect(json).not_to have_total_count(200)
+```
+
+### Error Response Matchers
+
+### have_error / have_errors
+
+Check if a response contains error information:
+
+```ruby
+# Array of errors
+json = '{"errors": [{"message": "Name is required"}]}'
+expect(json).to have_error
+expect(json).to have_errors  # alias
+
+# Single error object
+json = '{"error": "Something went wrong"}'
+expect(json).to have_error
+
+# Error message key
+json = '{"message": "Resource not found"}'
+expect(json).to have_error
+
+# Negation
+expect('{"data": {"id": 1}}').not_to have_error
+```
+
+### have_error_on
+
+Check for errors on specific fields:
+
+```ruby
+# API-style errors (array of error objects)
+json = '{"errors": [{"field": "email", "message": "is invalid"}]}'
+expect(json).to have_error_on(:email)
+expect(json).to have_error_on(:email).with_message("is invalid")
+
+# Rails-style errors (hash with field keys)
+json = '{"email": ["is invalid", "is already taken"]}'
+expect(json).to have_error_on(:email)
+expect(json).to have_error_on(:email).with_message("is invalid")
+
+# Pattern matching
+expect(json).to have_error_on(:email).matching(/invalid/i)
+
+# Negation
+expect(json).not_to have_error_on(:name)
+```
+
+### JSON:API Matchers
+
+### be_json_api_compliant
+
+Validate that a response follows the [JSON:API specification](https://jsonapi.org/):
+
+```ruby
+json = '{"data": {"id": "1", "type": "users", "attributes": {"name": "John"}}}'
+expect(json).to be_json_api_compliant
+
+# With errors
+json = '{"errors": [{"status": "404", "title": "Not Found"}]}'
+expect(json).to be_json_api_compliant
+
+# With meta only
+json = '{"meta": {"total": 100}}'
+expect(json).to be_json_api_compliant
+
+# Validates structure requirements:
+# - Must have data, errors, or meta
+# - data and errors cannot coexist
+# - Resources must have type
+# - etc.
+```
+
+### have_json_api_data
+
+Check for JSON:API data member with optional type and id matching:
+
+```ruby
+json = '{"data": {"id": "1", "type": "users", "attributes": {"name": "John"}}}'
+
+expect(json).to have_json_api_data
+expect(json).to have_json_api_data.of_type("users")
+expect(json).to have_json_api_data.with_id("1")
+expect(json).to have_json_api_data.of_type("users").with_id("1")
+
+# Works with arrays
+json = '{"data": [{"id": "1", "type": "users"}, {"id": "2", "type": "users"}]}'
+expect(json).to have_json_api_data.of_type("users")
+expect(json).to have_json_api_data.with_id("2")
+```
+
+### have_json_api_attributes
+
+Check for attributes in JSON:API data:
+
+```ruby
+json = '{"data": {"id": "1", "type": "users", "attributes": {"name": "John", "email": "john@example.com"}}}'
+
+expect(json).to have_json_api_attributes(:name, :email)
+expect(json).to have_json_api_attributes(:name)
+
+# Negation
+expect(json).not_to have_json_api_attributes(:password)
+```
+
+### have_json_api_relationships
+
+Check for relationships in JSON:API data:
+
+```ruby
+json = '{
+  "data": {
+    "id": "1",
+    "type": "posts",
+    "relationships": {
+      "author": {"data": {"id": "1", "type": "users"}},
+      "comments": {"data": []}
+    }
+  }
+}'
+
+expect(json).to have_json_api_relationships(:author, :comments)
+expect(json).to have_json_api_relationships(:author)
+
+# Negation
+expect(json).not_to have_json_api_relationships(:tags)
+```
+
+### HATEOAS Matchers
+
+### have_link
+
+Check for HATEOAS (Hypermedia as the Engine of Application State) links:
+
+```ruby
+# HAL-style links
+json = '{"_links": {"self": {"href": "/users/1"}, "posts": {"href": "/users/1/posts"}}}'
+
+expect(json).to have_link(:self)
+expect(json).to have_link(:posts)
+
+# With exact href match
+expect(json).to have_link(:self).with_href("/users/1")
+
+# With pattern match
+expect(json).to have_link(:self).with_href(/\/users\/\d+/)
+
+# Simple links format
+json = '{"links": {"self": "/users/1"}}'
+expect(json).to have_link(:self).with_href("/users/1")
+
+# Negation
+expect(json).not_to have_link(:delete)
 ```
 
 ## Configuration
@@ -688,12 +1113,27 @@ APIMatchers.setup do |config|
   # Automatically extract body from response objects
   config.response_body_method = :body
 
-  # Configure header access for be_json/be_xml matchers
+  # Configure header access for be_json/be_xml and header matchers
   config.header_method = :headers
   config.header_content_type_key = 'Content-Type'
 
   # Set default format for have_node matcher (:json or :xml)
   config.have_node_matcher = :json
+
+  # HTTP status extraction method (for status matchers)
+  config.http_status_method = :status
+
+  # Pagination configuration
+  config.pagination_meta_path = 'meta'      # path to pagination metadata
+  config.pagination_links_path = 'links'    # path to pagination links
+
+  # Error response configuration
+  config.errors_path = 'errors'             # path to errors array
+  config.error_message_key = 'message'      # key for error message
+  config.error_field_key = 'field'          # key for error field name
+
+  # HATEOAS links configuration
+  config.links_path = '_links'              # path to HATEOAS links (HAL style)
 end
 ```
 
@@ -704,6 +1144,7 @@ APIMatchers.setup do |config|
   config.response_body_method = :body
   config.header_method = :headers
   config.header_content_type_key = 'Content-Type'
+  config.http_status_method = :status
 end
 
 # Now you can use response directly:
@@ -711,6 +1152,7 @@ RSpec.describe "API", type: :request do
   it "returns JSON" do
     get "/api/users/1"
 
+    expect(response).to have_http_status(:ok)
     expect(response).to have_json_node(:id).with(1)
     expect(response).to be_json
   end
@@ -724,6 +1166,7 @@ APIMatchers.setup do |config|
   config.response_body_method = :body
   config.header_method = :headers
   config.header_content_type_key = 'content-type'  # Note: lowercase for some clients
+  config.http_status_method = :code                # or :status depending on client
 end
 ```
 
@@ -733,34 +1176,29 @@ end
 
 1. **Ruby 3.1+ required** - Ruby 1.9, 2.x, and early 3.x versions are no longer supported.
 
-2. **HTTP Status Matchers Removed** - These matchers have been removed as they duplicate `rspec-rails` functionality:
+2. **HTTP Status Matchers Renamed** - The old status matchers have been replaced with new, more comprehensive ones:
 
-   | Removed Matcher | rspec-rails Equivalent |
-   |----------------|----------------------|
-   | `be_ok` | `have_http_status(:ok)` |
+   | Old Matcher (0.x) | New Matcher (1.0) |
+   |-------------------|-------------------|
+   | `be_ok` | `have_http_status(:ok)` or `be_successful` |
    | `create_resource` | `have_http_status(:created)` |
-   | `be_bad_request` | `have_http_status(:bad_request)` |
-   | `be_unauthorized` | `have_http_status(:unauthorized)` |
-   | `be_forbidden` | `have_http_status(:forbidden)` |
-   | `be_not_found` | `have_http_status(:not_found)` |
-   | `be_unprocessable_entity` | `have_http_status(:unprocessable_entity)` |
-   | `be_internal_server_error` | `have_http_status(:internal_server_error)` |
-
-   **Migration example:**
-   ```ruby
-   # Before (api_matchers 0.x)
-   expect(response.status).to be_ok
-   expect(response.status).to create_resource
-
-   # After (rspec-rails)
-   expect(response).to have_http_status(:ok)
-   expect(response).to have_http_status(:created)
-   ```
-
-3. **Configuration Changes** - The `http_status_method` configuration option has been removed.
+   | `be_bad_request` | `have_http_status(:bad_request)` or `be_client_error` |
+   | `be_unauthorized` | `be_unauthorized` (unchanged) |
+   | `be_forbidden` | `be_forbidden` (unchanged) |
+   | `be_not_found` | `be_not_found` (unchanged) |
+   | `be_unprocessable_entity` | `be_unprocessable` or `be_unprocessable_entity` |
+   | `be_internal_server_error` | `have_http_status(:internal_server_error)` or `be_server_error` |
 
 ### New Features in 1.0
 
+- **HTTP Status Matchers** - `have_http_status`, `be_successful`, `be_redirect`, `be_client_error`, `be_server_error`, and specific status matchers
+- **JSON Structure Matchers** - `have_json_keys`, `have_json_type`
+- **Collection Matchers** - `have_json_size`, `be_sorted_by`
+- **Header Matchers** - `have_header`, `have_cors_headers`, `have_cache_control`
+- **Pagination Matchers** - `be_paginated`, `have_pagination_links`, `have_total_count`
+- **Error Response Matchers** - `have_error`, `have_errors`, `have_error_on`
+- **JSON:API Matchers** - `be_json_api_compliant`, `have_json_api_data`, `have_json_api_attributes`, `have_json_api_relationships`
+- **HATEOAS Matchers** - `have_link`
 - **`including(attributes)`** - Check if a JSON array contains an element matching the given attributes
 - **`including_all(elements)`** - Check if a JSON array contains all specified elements
 - **`match_json_schema(schema)`** - Validate JSON against a JSON Schema (requires `json_schemer` gem)

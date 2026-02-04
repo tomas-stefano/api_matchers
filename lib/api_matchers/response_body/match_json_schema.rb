@@ -5,12 +5,15 @@ require 'json'
 module APIMatchers
   module ResponseBody
     class MatchJsonSchema
-      attr_reader :setup, :schema, :actual
+      attr_reader :schema, :actual
 
       def initialize(options = {})
         @schema = options.fetch(:schema)
-        @setup = options.fetch(:setup)
         @errors = []
+      end
+
+      def setup
+        ::APIMatchers::Core::Setup
       end
 
       def matches?(actual)
@@ -51,8 +54,8 @@ module APIMatchers
       end
 
       def response_body
-        if @setup.response_body_method.present?
-          @actual.send(@setup.response_body_method)
+        if setup.response_body_method.present?
+          @actual.send(setup.response_body_method)
         else
           @actual
         end

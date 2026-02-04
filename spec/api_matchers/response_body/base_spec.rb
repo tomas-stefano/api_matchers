@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe APIMatchers::ResponseBody::Base do
-  let(:setup) { OpenStruct.new(:response_body_method => :body) }
-  subject { APIMatchers::ResponseBody::Base.new(setup: setup, expected_node: :status) }
+  subject { APIMatchers::ResponseBody::Base.new(expected_node: :status) }
 
   describe "#matches?" do
     it "should raise Not Implemented Error" do
@@ -13,8 +12,8 @@ RSpec.describe APIMatchers::ResponseBody::Base do
   end
 
   describe "#setup" do
-    it "should read from the initialize" do
-      expect(subject.setup).to equal setup
+    it "returns the global Setup class" do
+      expect(subject.setup).to eq APIMatchers::Core::Setup
     end
   end
 
@@ -28,6 +27,14 @@ RSpec.describe APIMatchers::ResponseBody::Base do
     let(:body) { { :foo => :bar}.to_json }
 
     context 'when have configuration' do
+      before do
+        APIMatchers.setup { |config| config.response_body_method = :body }
+      end
+
+      after do
+        APIMatchers.setup { |config| config.response_body_method = nil }
+      end
+
       it "should call the method when is config" do
         subject.actual = OpenStruct.new(:body => body)
         expect(subject.response_body).to eql body
@@ -35,8 +42,9 @@ RSpec.describe APIMatchers::ResponseBody::Base do
     end
 
     context 'when dont have configuration' do
-      let(:setup) { OpenStruct.new(:response_body_method => nil) }
-      subject { APIMatchers::ResponseBody::Base.new(setup: setup, expected_node: :status) }
+      before do
+        APIMatchers.setup { |config| config.response_body_method = nil }
+      end
 
       it "should return the actual when do not have config" do
         subject.actual = body

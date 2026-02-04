@@ -8,6 +8,9 @@ module APIMatchers
 
       class InvalidJSON < StandardError
       end
+
+      class PathNotFound < StandardError
+      end
     end
   end
 end

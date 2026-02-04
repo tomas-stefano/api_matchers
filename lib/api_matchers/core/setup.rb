@@ -55,6 +55,52 @@ module APIMatchers
       #
       cattr_accessor :header_method
       cattr_accessor :header_content_type_key
+
+      # HTTP status method - for extracting status codes from response objects
+      #
+      # ==== Examples
+      #
+      #  APIMatchers.setup do |config|
+      #    config.http_status_method = :status  # or :code, :status_code
+      #  end
+      #
+      cattr_accessor :http_status_method
+
+      # Pagination configuration
+      #
+      # ==== Examples
+      #
+      #  APIMatchers.setup do |config|
+      #    config.pagination_meta_path = 'meta'           # path to pagination metadata
+      #    config.pagination_links_path = 'links'         # path to pagination links
+      #  end
+      #
+      cattr_accessor :pagination_meta_path
+      cattr_accessor :pagination_links_path
+
+      # Error response configuration
+      #
+      # ==== Examples
+      #
+      #  APIMatchers.setup do |config|
+      #    config.errors_path = 'errors'                  # path to errors array
+      #    config.error_message_key = 'message'           # key for error message
+      #    config.error_field_key = 'field'               # key for error field name
+      #  end
+      #
+      cattr_accessor :errors_path
+      cattr_accessor :error_message_key
+      cattr_accessor :error_field_key
+
+      # HATEOAS links configuration
+      #
+      # ==== Examples
+      #
+      #  APIMatchers.setup do |config|
+      #    config.links_path = '_links'                   # path to HATEOAS links (HAL style)
+      #  end
+      #
+      cattr_accessor :links_path
     end
   end
 end

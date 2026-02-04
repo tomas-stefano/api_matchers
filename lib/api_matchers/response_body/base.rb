@@ -3,12 +3,15 @@
 module APIMatchers
   module ResponseBody
     class Base
-      attr_reader :setup, :expected_node, :actual
+      attr_reader :expected_node, :actual
       attr_writer :actual
 
       def initialize(options = {})
         @expected_node = options.fetch(:expected_node)
-        @setup = options.fetch(:setup)
+      end
+
+      def setup
+        ::APIMatchers::Core::Setup
       end
 
       def matches?(actual)
@@ -26,8 +29,8 @@ module APIMatchers
       end
 
       def response_body
-        if @setup.response_body_method.present?
-          @actual.send(@setup.response_body_method)
+        if setup.response_body_method.present?
+          @actual.send(setup.response_body_method)
         else
           @actual
         end
