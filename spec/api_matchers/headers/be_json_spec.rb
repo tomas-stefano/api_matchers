@@ -56,7 +56,7 @@ RSpec.describe APIMatchers::Headers::BeJSON do
       response = OpenStruct.new(:response_header => { "foo-bar" => "application/xml; charset=utf-8"})
       expect {
         expect(response).to be_json
-      }.to fail_with(%Q{expected a JSON response with 'application/json; charset=utf-8'. Got: '{"foo-bar"=>"application/xml; charset=utf-8"}'.})
+      }.to raise_error(RSpec::Expectations::ExpectationNotMetError, /expected a JSON response with 'application\/json; charset=utf-8'. Got: '\{"foo-bar".*"application\/xml; charset=utf-8"\}'\./)
     end
   end
 end

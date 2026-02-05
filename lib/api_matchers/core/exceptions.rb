@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module Core
     module Exceptions
@@ -5,6 +7,9 @@ module APIMatchers
       end
 
       class InvalidJSON < StandardError
+      end
+
+      class PathNotFound < StandardError
       end
     end
   end

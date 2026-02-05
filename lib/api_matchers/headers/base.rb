@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 module APIMatchers
   module Headers
     class Base
-      attr_reader :setup
-
-      def initialize(setup)
-        @setup = setup
+      def setup
+        ::APIMatchers::Core::Setup
       end
 
       def matches?(actual)
@@ -14,9 +14,9 @@ module APIMatchers
       end
 
       def content_type_response
-        if @setup.header_method.present? and @setup.header_content_type_key.present?
-          headers = @actual.send(@setup.header_method)
-          headers[@setup.header_content_type_key] || headers if headers.present?
+        if setup.header_method.present? && setup.header_content_type_key.present?
+          headers = @actual.send(setup.header_method)
+          headers.present? ? (headers[setup.header_content_type_key] || headers) : nil
         else
           @actual
         end
